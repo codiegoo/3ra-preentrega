@@ -1,0 +1,53 @@
+<h2>Productos En Tiempo Real</h2>
+<div class="product-list">
+  {{!-- Funcion que itera el array de productos y renderiza una seccion de plantilla por cada producto--}}
+  {{#each productos}}
+    <div class="productItem">
+      <h3>{{this.nombre}} <p>id: {{this.id}}</p></h3>
+      <img src={{this.img}} alt="">
+      <p>{{this.descripcion}}</p>
+      <p>${{this.price}}</p>
+    </div>
+  {{/each}}
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io()
+  socket.on('mensaje', message => {
+    console.log(message)
+  })
+  //Agregar producto y actualizar productList
+  socket.on('newProduct', products => {
+    const productList = document.querySelector('.product-list');
+    productList.innerHTML = '';
+    products.forEach(product => {
+      const productItem = document.createElement('div');
+      productItem.classList.add('productItem');
+      productItem.innerHTML = `
+        <h3>${product.nombre}</h3>
+        <img src="${product.img}" alt="">
+        <p>${product.descripcion}</p>
+        <p>$${product.price}</p>
+      `
+      productList.appendChild(productItem);
+    })
+  })
+  //Eliminar producto y actualizar productList
+  socket.on('deleteProduct', products => {
+    const productList = document.querySelector('.product-list');
+    productList.innerHTML = '';
+    products.forEach(product => {
+      const productItem = document.createElement('div');
+      productItem.classList.add('productItem');
+      productItem.innerHTML = `
+        <h3>${product.nombre} <p>id: {{this.id}}</p></h3>
+        <img src="${product.img}" alt="">
+        <p>${product.descripcion}</p>
+        <p>$${product.price}</p>
+      `
+      productList.appendChild(productItem);
+    })
+  })
+
+</script>
