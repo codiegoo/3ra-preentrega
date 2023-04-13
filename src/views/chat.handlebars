@@ -1,0 +1,49 @@
+<h1>Chat</h1>
+<div id="messages">
+</div>
+<form id="messagesForm" action="/" method="POST">
+  <input type="email" name="user" placeholder="Correo electrónico">
+  <input type="text" name="message" placeholder="Mensaje">
+  <button type="submit">Enviar</button>
+</form>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io(); // establecer conexión con el servidor WebSocket
+
+const messages = document.getElementById('messages'); // obtener el elemento donde se mostrarán los mensajes
+const messagesForm = document.getElementById('messagesForm'); // obtener el formulario de envío de mensajes
+const user = document.querySelector('input[name="user"]'); // obtener el campo de correo electrónico
+const message = document.querySelector('input[name="message"]'); // obtener el campo de mensaje
+
+// manejar el evento de mensaje recibido
+socket.on('new message', (data) => {
+  const li = document.createElement('li'); // crear un elemento de lista
+  li.innerHTML = `<strong>${data.user}</strong>: ${data.message}`; // agregar el mensaje al elemento de lista
+  messages.appendChild(li); // agregar el elemento de lista al contenedor de mensajes
+});
+
+// manejar el evento de mensajes antiguos recibidos
+socket.on('old messages', (data) => {
+  data.forEach((message) => {
+    const li = document.createElement('li'); // crear un elemento de lista
+    li.innerHTML = `<strong>${message.user}</strong>: ${message.message}`; // agregar el mensaje al elemento de lista
+    messages.appendChild(li); // agregar el elemento de lista al contenedor de mensajes
+  });
+});
+
+// manejar el envío de mensajes
+messagesForm.addEventListener('submit', (e) => {
+  e.preventDefault(); // evitar que se recargue la página
+
+  const data = {
+    user: user.value, // obtener el correo electrónico del usuario
+    message: message.value // obtener el mensaje del usuario
+  };
+
+  socket.emit('send message', data); // enviar el mensaje al servidor WebSocket
+
+  message.value = ''; // limpiar el campo de mensaje
+  message.focus(); // poner el cursor en el campo de mensaje
+});
+</script>
