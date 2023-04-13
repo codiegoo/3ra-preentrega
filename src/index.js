@@ -5,7 +5,7 @@ const io = socketIo(httpServer)
 const { port } = require('./config/app.config')
 
 
-app.set('socketio', io)
+app.locals.io = io
 
 
 //servidor Sockets

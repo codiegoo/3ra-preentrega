@@ -14,9 +14,7 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
   const socket = io()
-  socket.on('mensaje', message => {
-    console.log(message)
-  })
+
   //Agregar producto y actualizar productList
   socket.on('newProduct', products => {
     const productList = document.querySelector('.product-list');
@@ -32,6 +30,10 @@
       `
       productList.appendChild(productItem);
     })
+  })
+
+  socket.on('message', message => {
+    console.log(message)
   })
   //Eliminar producto y actualizar productList
   socket.on('deleteProduct', products => {

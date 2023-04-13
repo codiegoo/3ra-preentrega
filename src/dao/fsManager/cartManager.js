@@ -83,6 +83,6 @@ class CartManager{
   }
 }
 
-const ruta = './data/Carts.json'
+const ruta = 'src/data/Carts.json'
 const cartManager = new CartManager(ruta)
 module.exports = cartManager

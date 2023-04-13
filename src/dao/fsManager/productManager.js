@@ -39,7 +39,6 @@ class ProducManager{
     const id = products.length + 1
     const newProduct = product
     newProduct["id"] = id
-    console.log(newProduct)
     products.push(newProduct)
 
     try {
@@ -61,7 +60,6 @@ class ProducManager{
     try {
       const productos = JSON.parse(fs.readFileSync(this.path, 'utf-8'))
       if(limit){
-        console.log(productos.slice(0, limit))
         return productos.slice(0, limit)
       }else{
         return productos
@@ -79,7 +77,6 @@ class ProducManager{
     try {
       const producto = JSON.parse(fs.readFileSync(this.path, 'utf8'))
       const productoId = producto.find(product => product.id === id)
-      console.log(productoId)
       return productoId
     }catch(error){
       console.error(error)

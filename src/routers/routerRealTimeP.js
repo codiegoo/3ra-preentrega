@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const productManager = require('../productManager')
+const productManager = require('../dao/fsManager/productManager')
 const router = Router()
 
 
@@ -23,14 +23,14 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
 
   const product = req.body
-  console.log(product)
   try {
     productManager.addProduct(product)
     const products = productManager.getProducts()
     // console.log(products)
-    const io = req.app.get('socketio')
+    const io = req.app.locals.io
     io.emit('newProduct', products)
-    res.status(201).send({message: 'producto Creado'})
+    io.emit('message', `producto ${product.id} creado con exito!`)
+    res.status(201).send({newProduct: product})
   } catch (error) {
     console.error(error)
     res.status(400).send({error:`error al crear el producto, verifica que sea un objeto y cuente con las claves y valores correctos`})
@@ -43,7 +43,7 @@ router.delete('/:id', (req, res) => {
   try {
     productManager.deleteProduct(parseInt(id))
     const products = productManager.getProducts()
-    const io = req.app.get('socketio')
+    const io = req.app.locals.io
     io.emit('deleteProduct', products)
     res.status(200).send({message: `producto ${id} eliminado`})
   } catch (error) {

@@ -264,11 +264,11 @@
     "id": 22
   },
   {
-    "nombre": "teclado",
-    "descripcion": "teclado mecanico vsg",
-    "price": 4126,
-    "stock": 21,
-    "code": "0591-231268",
+    "nombre": "Mionitor Smsung",
+    "descripcion": "Monitor gamer Samsung Odyssey G3 S32AG32 LCD 32' negro",
+    "price": 6099,
+    "stock": 10,
+    "code": "02-23268",
     "category": "dispositivos",
     "status": true,
     "img": [
