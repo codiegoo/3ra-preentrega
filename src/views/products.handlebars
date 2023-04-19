@@ -1,0 +1,25 @@
+<h1>Products</h1>
+<ul>
+{{#each products}}
+  <li>
+    <h2>{{name}}</h2>
+    <p>{{description}}</p>
+    <p>Price: {{price}}</p>
+    <p>Category: {{category}}</p>
+    {{#if ../cartId}}
+    <form method="POST" action="/api/dbCarts/{{../cartId}}/{{this._id}}">
+      <input type="hidden" name="product_id" value="{{_id}}">
+      <button type="submit">Add to cart</button>
+    </form>
+    {{/if}}
+  </li>
+{{/each}}
+</ul>
+<div>
+  {{#if prevLink}}
+  <a href="{{prevLink}}">Prev</a>
+  {{/if}}
+  {{#if nextLink}}
+  <a href="{{nextLink}}">Next</a>
+  {{/if}}
+</div>

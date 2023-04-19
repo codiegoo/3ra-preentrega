@@ -16,6 +16,17 @@ router.get('/', async (req, res) => {
   }
 })
 
+// GET muestra un carrito en especifico
+router.get('/:cid', async (req, res) => {
+  try {
+      const cart = await Cart.findById(req.params.cid).populate('productos.product');
+      res.json(cart);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Error getting cart' });
+    }
+  });
+
 
 //POST introduce un producto en un carrito
 router.post('/:cartId/:productId', async (req, res) => {
@@ -44,20 +55,6 @@ router.post('/:cartId/:productId', async (req, res) => {
   }
 });
 
-// DELETE del carrito el producto seleccionado
-router.delete('/:cid/products/:pid', async (req, res) => {
-  try {
-    const cart = await Cart.findOne({ _id: req.params.cid });
-    const productIndex = cart.productos.findIndex(item => item.product.equals(new mongoose.Types.ObjectId(req.params.pid)));
-    if (productIndex === -1) throw new Error('Product not found in cart');
-    cart.productos.splice(productIndex, 1);
-    await cart.save();
-    res.json({ message: 'Product removed from cart', cart });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: 'Error removing product from cart' });
-  }
-});
 
 // PUT actualizar el carrito con un arreglo de productos
 router.put('/:cid', async (req, res) => {
@@ -87,6 +84,21 @@ router.put('/:cid/products/:pid', async (req, res) => {
   }
 });
 
+// DELETE del carrito el producto seleccionado
+router.delete('/:cid/products/:pid', async (req, res) => {
+  try {
+    const cart = await Cart.findOne({ _id: req.params.cid });
+    const productIndex = cart.productos.findIndex(item => item.product.equals(new mongoose.Types.ObjectId(req.params.pid)));
+    if (productIndex === -1) throw new Error('Product not found in cart');
+    cart.productos.splice(productIndex, 1);
+    await cart.save();
+    res.json({ message: 'Product removed from cart', cart });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Error removing product from cart' });
+  }
+});
+
 // DELETE todos los productos del carrito
 router.delete('/:cid', async (req, res) => {
   try {
@@ -100,14 +112,5 @@ router.delete('/:cid', async (req, res) => {
   }
 });
 
-// GET muestra un carrito en especifico
-router.get('/:cid', async (req, res) => {
-try {
-    const cart = await Cart.findById(req.params.cid).populate('productos.product');
-    res.json(cart);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: 'Error getting cart' });
-  }
-});
+
 module.exports = router

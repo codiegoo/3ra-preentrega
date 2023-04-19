@@ -2,7 +2,12 @@ const express = require('express')
 const app = express()
 
 //handlebars
-const handlebars = require('express-handlebars')
+const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
+const handlebars = require('express-handlebars');
+const hbs = handlebars.create({
+  handlebars: allowInsecurePrototypeAccess(require('handlebars')),
+  defaultLayout: 'main'
+});
 //dataBase
 const mongoConnect = require('../db')
 //Router
@@ -14,7 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 //middleware para leer datos de archivos json
 app.use(express.json())
-app.engine('handlebars', handlebars.engine())
+app.engine('handlebars', hbs.engine);
 app.set('views',__dirname + '/views')
 
 

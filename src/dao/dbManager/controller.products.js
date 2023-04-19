@@ -1,17 +1,15 @@
 const { Router } = require('express')
 const Products = require('../models/Products.model')
+const Cart = require('../models/Carts.model')
 const uploader = require('../../utils/multer.utils')
 const mongoosePaginate = require('mongoose-paginate-v2')
 const router = Router()
 
 router.get('/', async (req, res) => {
-
-
-
   const limit = parseInt(req.query.limit) || 10 ;
   const page = parseInt(req.query.page) || 1;
   const sort = req.query.sort === 'asc' ? 'price' : req.query.sort === 'desc' ? '-price' : null;
-  const query = req.query.query ? {type: req.query.query }:{}
+  const query = req.query.query ? { $or: [{ name: { $regex: req.query.query, $options: 'i' } }, { description: { $regex: req.query.query, $options: 'i' } }] } : {};
   try {
     const products = await Products.paginate(query, {
       limit: limit,
@@ -22,14 +20,18 @@ router.get('/', async (req, res) => {
     const prevPage = products.prevPage;
     const nextPage = products.nextPage;
     const currentPage = products.page;
-    const hasPrevPage = pro.ductshasPrevPage;
+    const hasPrevPage = products.hasPrevPage;
     const hasNextPage = products.hasNextPage;
     const prevLink = hasPrevPage ? `http://${req.headers.host}/products?page=${prevPage}&limit=${limit}&sort=${sort}&query=${query}` : null;
     const nextLink = hasNextPage ? `http://${req.headers.host}/products?page=${nextPage}&limit=${limit}&sort=${sort}&query=${query}` : null;
 
-    res.status(200).json({
-      status: 'success',
-      payload: products.docs,
+    const newCart = await Cart.create({});
+    const cartId = newCart._id.toString();
+    console.log('cartId:', cartId)
+    res.render('products.handlebars', {
+      title: 'Lista de Productos',
+      products: products.docs,
+      cartId: cartId,
       totalPages: totalPages,
       prevPage: prevPage,
       nextPage: nextPage,
@@ -37,7 +39,9 @@ router.get('/', async (req, res) => {
       hasPrevPage: hasPrevPage,
       hasNextPage: hasNextPage,
       prevLink: prevLink,
-      nextLink: nextLink
+      nextLink: nextLink,
+      allowProtoPropertiesByDefault: true,
+      allowProtoMethodsByDefault: true
     });
   } catch (err) {
     res.status(500).json({
