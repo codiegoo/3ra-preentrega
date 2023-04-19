@@ -1,23 +1,59 @@
 const { Router } = require('express')
 const Products = require('../models/Products.model')
 const uploader = require('../../utils/multer.utils')
-
+const mongoosePaginate = require('mongoose-paginate-v2')
 const router = Router()
 
 router.get('/', async (req, res) => {
-  const products = await Products.find()
-  res.json({allProducts: products})
-})
+
+
+
+  const limit = parseInt(req.query.limit) || 10 ;
+  const page = parseInt(req.query.page) || 1;
+  const sort = req.query.sort === 'asc' ? 'price' : req.query.sort === 'desc' ? '-price' : null;
+  const query = req.query.query ? {type: req.query.query }:{}
+  try {
+    const products = await Products.paginate(query, {
+      limit: limit,
+      page: page,
+      sort: sort
+    });
+    const totalPages = products.totalPages;
+    const prevPage = products.prevPage;
+    const nextPage = products.nextPage;
+    const currentPage = products.page;
+    const hasPrevPage = pro.ductshasPrevPage;
+    const hasNextPage = products.hasNextPage;
+    const prevLink = hasPrevPage ? `http://${req.headers.host}/products?page=${prevPage}&limit=${limit}&sort=${sort}&query=${query}` : null;
+    const nextLink = hasNextPage ? `http://${req.headers.host}/products?page=${nextPage}&limit=${limit}&sort=${sort}&query=${query}` : null;
+
+    res.status(200).json({
+      status: 'success',
+      payload: products.docs,
+      totalPages: totalPages,
+      prevPage: prevPage,
+      nextPage: nextPage,
+      page: currentPage,
+      hasPrevPage: hasPrevPage,
+      hasNextPage: hasNextPage,
+      prevLink: prevLink,
+      nextLink: nextLink
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      message: err.message
+    });
+  }
+});
 
 router.post('/', uploader.single('file'), async (req, res) => {
-
   try {
     const newProduct = await Products.create(req.body)
     res.json({message: newProduct})
   } catch (error) {
     console.log(error)
   }
-
 })
 
 router.put('/:productId', async (req, res) => {
