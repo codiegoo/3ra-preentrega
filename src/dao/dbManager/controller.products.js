@@ -11,6 +11,13 @@ router.get('/', async (req, res) => {
   const sort = req.query.sort === 'asc' ? 'price' : req.query.sort === 'desc' ? '-price' : null;
   const query = req.query.query ? { $or: [{ name: { $regex: req.query.query, $options: 'i' } }, { description: { $regex: req.query.query, $options: 'i' } }] } : {};
   try {
+    const cartId = req.cookies.cartId;
+    if (!cartId) {
+      const newCart = await Cart.create({});
+      cartId = newCart._id.toString();
+      res.cookie('cartId', cartId, { maxAge: 3600000 });
+    }
+
     const products = await Products.paginate(query, {
       limit: limit,
       page: page,
@@ -25,9 +32,7 @@ router.get('/', async (req, res) => {
     const prevLink = hasPrevPage ? `http://${req.headers.host}/products?page=${prevPage}&limit=${limit}&sort=${sort}&query=${query}` : null;
     const nextLink = hasNextPage ? `http://${req.headers.host}/products?page=${nextPage}&limit=${limit}&sort=${sort}&query=${query}` : null;
 
-    const newCart = await Cart.create({});
-    const cartId = newCart._id.toString();
-    console.log('cartId:', cartId)
+
     res.render('products.handlebars', {
       title: 'Lista de Productos',
       products: products.docs,

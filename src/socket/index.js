@@ -1,12 +1,12 @@
 const socketIo = require('socket.io')
 const Message = require('../dao/models/Messages.model')
+const Cart = require('../dao/models/Carts.model')
 
 const initSocketServer = httpServer => {
-  const io = socketIo(httpServer)
+  const io = socketIo(httpServer);
 
-
-  io.on('connection', socket => {
-    console.log('cliente conectado')
+  io.on('connection', async socket => {
+    console.log('cliente conectado');
 
     Message.find().then((messages) => {
       socket.emit('old messages', messages);
@@ -21,11 +21,10 @@ const initSocketServer = httpServer => {
         io.emit('new message', message);
       });
     });
-  })
-  // io.on('message', message => {
-  //   console.log('Mensaje recibido en el servidor:', message)
-  // })
-  return io
-}
+  });
+
+  return io;
+};
+
 
 module.exports = initSocketServer

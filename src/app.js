@@ -1,5 +1,7 @@
 const express = require('express')
+const cookieParser = require('cookie-parser')
 const app = express()
+
 
 //handlebars
 const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
@@ -12,7 +14,8 @@ const hbs = handlebars.create({
 const mongoConnect = require('../db')
 //Router
 const router = require('./routers')
-
+//middleware para cookies
+app.use(cookieParser());
 // middleware para leer datos de formularios
 app.use(express.urlencoded({ extended: true }));
 // Servir archivos estáticos desde la carpeta "public"
