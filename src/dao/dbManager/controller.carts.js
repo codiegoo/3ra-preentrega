@@ -20,7 +20,7 @@ router.get('/', async (req, res) => {
 router.get('/:cid', async (req, res) => {
   try {
       const cart = await Cart.findById(req.params.cid).populate('productos.product');
-      res.json(cart);
+      res.status(200).render('carts.handlebars', {cart});
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: 'Error getting cart' });
