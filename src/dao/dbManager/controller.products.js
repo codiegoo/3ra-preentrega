@@ -29,8 +29,8 @@ router.get('/', async (req, res) => {
     const currentPage = products.page;
     const hasPrevPage = products.hasPrevPage;
     const hasNextPage = products.hasNextPage;
-    const prevLink = hasPrevPage ? `http://${req.headers.host}/products?page=${prevPage}&limit=${limit}&sort=${sort}&query=${query}` : null;
-    const nextLink = hasNextPage ? `http://${req.headers.host}/products?page=${nextPage}&limit=${limit}&sort=${sort}&query=${query}` : null;
+    const prevLink = hasPrevPage ? `http://${req.headers.host}/api/dbProducts?page=${prevPage}&limit=${limit}&sort=${sort}&query=${query}` : null;
+    const nextLink = hasNextPage ? `http://${req.headers.host}/api/dbProducts?page=${nextPage}&limit=${limit}&sort=${sort}&query=${query}` : null;
 
 
     res.render('products.handlebars', {
