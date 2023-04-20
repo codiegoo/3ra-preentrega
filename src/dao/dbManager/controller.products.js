@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
   const sort = req.query.sort === 'asc' ? 'price' : req.query.sort === 'desc' ? '-price' : null;
   const query = req.query.query ? { $or: [{ name: { $regex: req.query.query, $options: 'i' } }, { description: { $regex: req.query.query, $options: 'i' } }] } : {};
   try {
-    const cartId = req.cookies.cartId;
+    let cartId = req.cookies.cartId;
     if (!cartId) {
       const newCart = await Cart.create({});
       cartId = newCart._id.toString();

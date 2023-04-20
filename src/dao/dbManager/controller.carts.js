@@ -4,8 +4,8 @@ const Cart = require('../models/Carts.model')
 const Products = require('../models/Products.model')
 const router = Router()
 
-//GET crea un carrito vacio
-router.get('/', async (req, res) => {
+//POST crea un carrito vacio
+router.post('/', async (req, res) => {
   try {
     const newCart = await Cart.create({})
     console.log('Nuevo carrito creado:', newCart)
