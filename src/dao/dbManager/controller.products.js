@@ -9,7 +9,15 @@ router.get('/', async (req, res) => {
   const limit = parseInt(req.query.limit) || 10 ;
   const page = parseInt(req.query.page) || 1;
   const sort = req.query.sort === 'asc' ? 'price' : req.query.sort === 'desc' ? '-price' : null;
-  const query = req.query.query ? {$and: [{ $or: [{ name: { $regex: req.query.query, $options: 'i' } }, { description: { $regex: req.query.query, $options: 'i' } }] },{ category: { $regex: req.query.category, $options: 'i' } }]} : { category: { $regex: req.query.category, $options: 'i' } };
+  const query = req.query.query ? {
+    $and: [
+      { $or: [
+        { name: { $regex: new RegExp(req.query.query, 'i') } },
+        { description: { $regex: new RegExp(req.query.query, 'i') } }
+      ]},
+      { category: { $regex: req.query.category || '', $options: 'i' } }
+    ]
+  } : { category: { $regex: req.query.category || '', $options: 'i' } };
   try {
     let cartId = req.cookies.cartId;
     if (!cartId) {
