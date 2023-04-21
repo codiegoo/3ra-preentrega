@@ -4,8 +4,8 @@ const app = express()
 
 
 //handlebars
-const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
 const handlebars = require('express-handlebars');
+const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
 const hbs = handlebars.create({
   handlebars: allowInsecurePrototypeAccess(require('handlebars')),
   defaultLayout: 'main'
