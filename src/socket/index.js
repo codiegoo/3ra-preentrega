@@ -24,7 +24,7 @@ const initSocketServer = httpServer => {
   });
 
   return io;
-};
+}
 
 
 module.exports = initSocketServer

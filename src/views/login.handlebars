@@ -1,0 +1,41 @@
+<h2>Login</h2>
+
+<form action="" id="loginForm">
+  <label for="">Email</label>
+  <input type="email" name="email">
+
+  <label for="">Password</label>
+  <input type="password" name="password">
+
+  <button type="submit">Iniciar sesión</button>
+</form>
+<button onclick="window.location.href='/api/register'">Registrarse</button>
+<script>
+  const form = document.getElementById('loginForm')
+
+  form.addEventListener('submit', e => {
+    e.preventDefault()
+
+    const data = new FormData(form)
+    const obj = {}
+
+    data.forEach((value, key) => (obj[key] = value))
+
+    const url = '/api/login'
+    const headers = {
+      'Content-type': 'application/json',
+  }
+  const method = 'POST'
+  const body = JSON.stringify(obj)
+
+  fetch(url, {
+    headers,
+    method,
+    body,
+  })
+    .then(() => {
+        window.location.href = '/api/dbProducts';
+      })
+    .catch(error => console.log(error))
+})
+</script>

@@ -2,6 +2,7 @@ const { Router } = require('express')
 const mongoose = require('mongoose')
 const Cart = require('../models/Carts.model')
 const Products = require('../models/Products.model')
+const privateAccess = require('../../middlewares/privateAccess.middleware')
 const router = Router()
 
 //POST crea un carrito vacio
@@ -17,7 +18,7 @@ router.post('/', async (req, res) => {
 })
 
 // GET muestra un carrito en especifico
-router.get('/:cid', async (req, res) => {
+router.get('/:cid', privateAccess, async (req, res) => {
   try {
       const cart = await Cart.findById(req.params.cid).populate('productos.product');
       res.status(200).render('carts.handlebars', {cart});
