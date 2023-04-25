@@ -16,6 +16,7 @@ router.get('/', (req, res) => {
 
 router.post('/', async (req, res, next) => {
   try {
+    // Recopilar y verificar la informacion del usuario
     const { email, password } = req.body
     const user = await Users.findOne({ email })
     if (!user)
@@ -24,7 +25,7 @@ router.post('/', async (req, res, next) => {
     if (user.password !== password)
       return next('El usuario y la contraseña no coincide')
 
-
+    // Establecer una session con los datos del usuario autenticado
     req.session.user = {
       first_name: user.first_name,
       last_name: user.last_name,
@@ -36,6 +37,10 @@ router.post('/', async (req, res, next) => {
     console.log(error.message)
     res.status(500).json({ status: 'error', error: 'Internal Server Error' })
   }
+
+
+
+  // Aqui utilizo el middleware despues de establecer la session para que esta contenga los datos del usuaario, si la pusiera al inicio esta no se ejecutaria por que no hay una session iniciada
 }, publicAccess, (req, res) => {
   res.status(500).json({message: 'usuario no encontrado'})
 })

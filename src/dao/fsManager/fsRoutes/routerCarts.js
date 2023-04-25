@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const cartManager = require('../dao/fsManager/cartManager')
+const cartManager = require('../cartManager')
 const router = Router()
 
 // Permite crear un carrito vacio

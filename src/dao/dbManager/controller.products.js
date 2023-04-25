@@ -6,25 +6,18 @@ const mongoosePaginate = require('mongoose-paginate-v2')
 const router = Router()
 const privateAccess = require('../../middlewares/privateAccess.middleware')
 
+
+// Utiliza el middleware de acceso privado para verificar que el usuaio este autenticado si no lo redirecciona al login
 router.get('/', privateAccess, async (req, res) => {
+  //Querys para filtrar los productos
   const limit = parseInt(req.query.limit) || 10;
   const page = parseInt(req.query.page) || 1;
-  const sort = req.query.sort === 'asc'
-      ? 'price'
-      : req.query.sort === 'desc'
-      ? '-price'
-      : null;
-  const query = req.query.query
-    ? {
-        $and: [
-          {
-            $or: [
+  const sort = req.query.sort === 'asc' ? 'price' : req.query.sort === 'desc' ? '-price' : null;
+  const query = req.query.query? {$and: [{$or: [
               { name: { $regex: new RegExp(req.query.query, 'i') } },
               { description: { $regex: new RegExp(req.query.query, 'i') } },
             ],
-          },
-          {
-            category: {
+          },{category: {
               $regex: req.query.category || '',
               $options: 'i',
             },
@@ -32,8 +25,10 @@ router.get('/', privateAccess, async (req, res) => {
         ],
       }
     : { category: { $regex: req.query.category || '', $options: 'i' } };
-  try {
 
+
+  try {
+    //buscar, paginar, filtrar productos
     const products = await Products.paginate(query, {
       limit: limit,
       page: page,
@@ -60,7 +55,10 @@ router.get('/', privateAccess, async (req, res) => {
 
     // Buscar el carrito del usuario por el id del usuario
     const cart = await Cart.findOne({ userId: user._id });
+    // parsear el objeto con el id del usuario a cadena
     const cartId = cart._id.toString()
+
+    //renderizamos la vista handlebars y pasamos los datos con los que trabajaremos
     res.render('products.handlebars', {
       title: 'Lista de Productos',
       cartId: cartId,
@@ -73,9 +71,9 @@ router.get('/', privateAccess, async (req, res) => {
       hasNextPage: hasNextPage,
       prevLink: prevLink,
       nextLink: nextLink,
+      message: message,
       allowProtoPropertiesByDefault: true,
       allowProtoMethodsByDefault: true,
-      message: message // Pasar el mensaje de bienvenida a la vista
     });
   } catch (err) {
     res.status(500).json({
