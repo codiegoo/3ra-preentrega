@@ -1,40 +1,23 @@
 const { Router } = require('express')
 const Users = require('../models/Users.model')
 const Cart = require('../models/Carts.model')
+const {usersCreate} = require('../dbDao/users.dao')
 
 const router = Router()
 
 router.post('/', async (req, res) => {
   try {
     const { first_name, last_name, email, age, password } = req.body
-
-    // Verificar si el usuario es admin y lo clasifica
-    let role = 'usuario'
-    if (email === 'admin@gmail.com' && password === 'admin') {
-      role = 'administrador'
-    }
-
-
-    const newUserInfo = {
+    const userInfo = {
       first_name,
       last_name,
       email,
       age,
-      password,
-      role,
+      password
     }
+    const newUser = await usersCreate(userInfo)
 
-    // Crear un nuevo usuario con su respectiva info y rol
-    const user = await Users.create(newUserInfo)
-
-    // Crear un nuevo carrito para el usuario y vincularlo con su ID
-    const cart = new Cart({
-      userId: user._id
-    });
-    // Guardar el carrito con el id del usuario
-    await cart.save();
-
-    res.status(201).json({ status: 'success', message: user })
+    res.status(201).json({ status: 'success', message: newUser })
   } catch (error) {
     console.log(error.message)
     res.status(500).json({ status: 'error', error: 'Internal server error' })
