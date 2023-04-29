@@ -1,22 +1,13 @@
 const { Router } = require('express')
-const Users = require('../models/Users.model')
-const Cart = require('../models/Carts.model')
-const {usersCreate} = require('../dbDao/users.dao')
+// const {usersCreate} = require('../dbDao/users.dao')
+// const {hashPassword} = require('../../utils/cryptPassword.utils')
+const passport = require('passport')
 
 const router = Router()
 
-router.post('/', async (req, res) => {
+router.post('/', passport.authenticate('register', { failureRedirect: 'register/failresgister' }), async (req, res) => {
   try {
-    const { first_name, last_name, email, age, password } = req.body
-    const userInfo = {
-      first_name,
-      last_name,
-      email,
-      age,
-      password
-    }
-    const newUser = await usersCreate(userInfo)
-
+    const newUser = req.user
     res.status(201).json({ status: 'success', message: newUser })
   } catch (error) {
     console.log(error.message)
@@ -32,4 +23,9 @@ router.get('/', (req, res) => {
   }
 })
 
+router.get('/failregister', (req, res) => {
+  console.log('falló estrategia de registro!')
+
+  res.json({ error: 'Failed register' })
+})
 module.exports = router

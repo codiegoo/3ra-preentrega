@@ -1,7 +1,10 @@
 function publicAccess(req, res, next) {
-  if (req.session.user) return res.redirect('/api/dbProducts')
-
-  next()
+  console.log('middleware de acceso publico')
+  if (req.session.user) {
+    res.redirect('/api/dbProducts')
+  } else {
+    next()
+  }
 }
 
 module.exports = publicAccess

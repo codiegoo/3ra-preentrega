@@ -5,6 +5,8 @@ const session = require('express-session')
 const MongoStore = require('connect-mongo')
 const mongoConnect = require('../db')
 const router = require('./routers')
+const passport = require('passport')
+const initializePassport = require('./config/passport.config')
 
 
 
@@ -30,6 +32,11 @@ app.use(
     saveUninitialized: false
   })
 );
+
+//passport middleware
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
 
 
 
