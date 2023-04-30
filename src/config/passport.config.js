@@ -66,28 +66,25 @@ const initializePassport = () => {
     'github',
     new GithubStrategy(
       {
-        clientID: '3c012fc88f2816c327f1',
-        clientSecret: '470401423f2d5b5199f49869f32111d16183cd07',
+        clientID: '4366bf8ab2389bc95ba7',
+        clientSecret: '0adfbc869ceaf314bb8c2d602ec62857d7bb0b5a',
         callbackURL: 'http://localhost:8080/api/login/githubcallback',
       },
-      async ( profile, done) => {
+      async ( accessToken, refreshToken,profile, done) => {
         try {
-          console.log(profile)
-
           const user = await Users.findOne({ email: profile._json.email })
-
-          if (!user) {
-            const newUserInfo = {
+          console.log(profile)
+          if(!user){
+            const userInfo = {
               first_name: profile._json.name,
               last_name: '',
               age: 18,
               email: profile._json.email,
               password: '',
             }
-            const newUser = await Users.create(newUserInfo)
+            const newUser = await usersCreate(userInfo)
             return done(null, newUser)
           }
-
           done(null, user)
         } catch (error) {
           done(error)
@@ -96,13 +93,18 @@ const initializePassport = () => {
     )
   )
 
-  passport.serializeUser((user, done) => {
-    done(null, user.id)
+  passport.serializeUser((newUser, done) => {
+    const userId = newUser.id
+    done(null, userId)
   })
 
   passport.deserializeUser(async (id, done) => {
-    const user = await Users.findById(id)
-    done(null, user)
+    try {
+      const user = await Users.findById(id)
+      done(null, user)
+    } catch (error) {
+      console.error(error)
+    }
   })
 }
 

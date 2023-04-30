@@ -12,6 +12,7 @@ router.get('/', privateAccess, async (req, res) => {
   try {
     // Verificar si hay un usuario autenticado y pasar sus datos a la vista
     const user = req.session.user;
+    console.log(user)
     const message = user
       ? `Bienvenido ${user.role} ${user.first_name} ${user.last_name}!`
       : null;

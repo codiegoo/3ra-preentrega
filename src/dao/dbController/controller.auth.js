@@ -54,7 +54,7 @@ router.get(
   passport.authenticate('github', { failureRedirect: 'login/faillogin' }),
   async (req, res) => {
     req.session.user = req.user
-    res.redirect('/api/login')
+    res.redirect('/api/dbProducts')
   }
 )
 
