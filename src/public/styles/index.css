@@ -1,6 +1,7 @@
+/* Estilos Generales */
 body{
   margin: 0;
-  padding: 1rem;
+  padding: 0;
   font-family:sans-serif;
 }
 h2{
@@ -25,7 +26,7 @@ div.formsContainer{
   margin: 2rem;
   padding: 1rem;
 }
-.formsContaine,form{
+.formsContaine{
   background-color: aqua;
   margin: 1rem;
   padding: 1rem;
@@ -54,4 +55,167 @@ button{
 }
 button:hover{
   cursor: pointer;
+  background-color: gray;
+}
+
+div.nav{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: aquamarine;
+}
+div.bottonsNav{
+  display: flex;
+  justify-content: space-between;
+}
+.bottonsNav button{
+  margin: 1rem
+}
+.bottonsNav form span.numProducts{
+  background: red;
+  padding: .1rem .3rem .1rem .3rem;
+  border-radius: 2rem;
+}
+
+h1{
+  text-align: center;
+  margin: 8rem;
+}
+
+
+/* Estilos de productos */
+ul.productsContain{
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.productsContain li{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  list-style: none;
+  margin: 1rem;
+  padding: 1.5rem;
+  background-color: aquamarine;
+  border-radius: 1rem;
+}
+
+li p{
+  text-align: center;
+}
+li img{
+  width: 10rem;
+}
+
+/* Estilos De Login */
+
+.loginContain{
+  width: 40rem;
+  background-color: aquamarine;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  margin: 10rem auto;
+}
+.loginContain h2{
+  margin: 2rem;
+}
+.loginContain form{
+  display: flex;
+  flex-direction: column;
+}
+.loginContain form label{
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.loginContain a {
+  background: gainsboro;
+  text-decoration: none;
+  color: black;
+  padding: 1rem;
+  border-radius: 1rem;
+  margin-top: 2rem;
+}
+.loginContain .registerBtn{
+  margin-top: .5rem;
+  width: 10.5rem;
+  background: gainsboro;
+  padding: 1rem;
+}
+.loginContain a:hover{
+  background: grey;
+}
+
+.registerBtn:hover{
+  background: grey;
+} 
+
+
+/* Estilos De Register */
+
+.registerContain{
+  width: 40rem;
+  background-color: aquamarine;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  margin: 10rem auto;
+}
+.registerContain h2{
+  margin: 2rem;
+}
+.registerContain form{
+  display: flex;
+  flex-direction: column;
+}
+.registerContain form label{
+  text-align: center;
+  margin-top: 1rem;
+}
+
+/* Estilos DeL Carrito */
+
+.cartsContain{
+  width: 40rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  margin: 2rem auto;
+}
+.cartsContain h1{
+  margin: 2rem;
+}
+
+.cartsContain ul{
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+.cartsContain ul{
+  width: 100%;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cartsContain ul li{
+  width: 100%;
+  margin: 1rem;
+  padding: 2rem;
+  border-radius: 1rem;
+  display: flex;
+  background-color: aquamarine;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }

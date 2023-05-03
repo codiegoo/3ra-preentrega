@@ -7,12 +7,12 @@ const privateAccess = require('../../middlewares/privateAccess.middleware')
 const productSearch = require('../dbDao/products.dao')
 
 
+
 // Utiliza el middleware de acceso privado para verificar que el usuaio este autenticado si no lo redirecciona al login
 router.get('/', privateAccess, async (req, res) => {
   try {
     // Verificar si hay un usuario autenticado y pasar sus datos a la vista
     const user = req.session.user;
-    console.log(user)
     const message = user
       ? `Bienvenido ${user.role} ${user.first_name} ${user.last_name}!`
       : null;
@@ -20,9 +20,9 @@ router.get('/', privateAccess, async (req, res) => {
     const cart = await Cart.findOne({ userId: user._id });
     // parsear el objeto con el id del usuario a cadena
     const cartId = cart._id.toString()
-    const productList = await productSearch(req, message, cartId)
+    const products = await productSearch(req, message, cartId)
     //renderizamos la vista handlebars y pasamos los datos con los que trabajaremos
-    res.render('products.handlebars', productList);
+    res.render('products.handlebars', products);
   } catch (err) {
     res.status(500).json({
       status: 'error',

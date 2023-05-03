@@ -1,5 +1,5 @@
 const Products = require('../models/Products.model')
-
+const Cart = require('../models/Carts.model')
 
 
 
@@ -24,6 +24,7 @@ async function productSearch(req, message, cartId){
     : { category: { $regex: req.query.category || '', $options: 'i' } };
 try {
     //buscar, paginar, filtrar productos
+    const cart = await Cart.findById(cartId);
     const products = await Products.paginate(query, {
       limit: limit,
       page: page,
@@ -42,11 +43,14 @@ try {
       ? `http://${req.headers.host}/api/dbProducts?page=${nextPage}&limit=${limit}&sort=${sort}&query=${query}`
       : null;
 
+    
+    const numProdCart = cart.productos.length
 		//agregar mensaje y id de carrito
 		const productList = {
       title: 'Lista de Productos',
       products: products.docs,
 			cartId: cartId,
+      cartQuantity: numProdCart,
 			message: message,
       totalPages: totalPages,
       prevPage: prevPage,

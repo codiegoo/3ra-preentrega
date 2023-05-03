@@ -39,7 +39,6 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 
-
 //handlebars
 const handlebars = require('express-handlebars');
 const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');

@@ -49,7 +49,7 @@ router.post('/:cartId/:productId', async (req, res) => {
     }
 
     await cart.save();
-    res.json({ message: 'Product added to cart', cart });
+    res.status(200).redirect(req.header('Referer'))
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'Error adding product to cart' });
@@ -86,14 +86,15 @@ router.put('/:cid/products/:pid', async (req, res) => {
 });
 
 // DELETE del carrito el producto seleccionado
-router.delete('/:cid/products/:pid', async (req, res) => {
+router.post('/:cid/products/:pid', async (req, res) => {
   try {
     const cart = await Cart.findOne({ _id: req.params.cid });
     const productIndex = cart.productos.findIndex(item => item.product.equals(new mongoose.Types.ObjectId(req.params.pid)));
     if (productIndex === -1) throw new Error('Product not found in cart');
     cart.productos.splice(productIndex, 1);
     await cart.save();
-    res.json({ message: 'Product removed from cart', cart });
+    res.redirect(`/api/dbCarts/${req.params
+    .cid}`)
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'Error removing product from cart' });

@@ -1,17 +1,18 @@
-<h2>Login</h2>
+<div class="loginContain">
+  <h2>Login</h2>
 
-<form action="" id="loginForm">
-  <label for="">Email</label>
-  <input type="email" name="email">
+  <form action="" id="loginForm">
+    <label for="">Email</label>
+    <input type="email" name="email">
 
-  <label for="">Password</label>
-  <input type="password" name="password">
+    <label for="">Password</label>
+    <input type="password" name="password">
 
-  <button type="submit">Iniciar sesión</button>
-</form>
-<button onclick="window.location.href='/api/register'">Registrarse</button>
-<div>
-  <a href="/api/login/github"><button>Ingresar con GitHub</button></a>
+    <button type="submit">Iniciar sesión</button>
+  </form>
+  <a href="/api/login/github">Ingresar con GitHub</a>
+  <button onclick="window.location.href='/api/register'" class="registerBtn">Registrarse</button>
+
 </div>
 <script>
   const form = document.getElementById('loginForm')
@@ -38,7 +39,7 @@
   })
     .then(response => response.json())
     .then(() => {
-        window.location.href = '/api/dbProducts';
+        window.location.href = '/api/dbProducts?limit=9';
       })
     .catch(error => console.log(error))
 })

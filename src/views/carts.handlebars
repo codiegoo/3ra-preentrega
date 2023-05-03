@@ -1,16 +1,30 @@
-<h1>Carrito de Compras</h1>
-<p>ID: {{cart._id}}</p>
-{{#if cart.productos.length}}
-  <ul>
-  {{#each cart.productos}}
-    <li>
-      {{this.product.name}} -
-      Precio: {{this.product.price}} -
-      Categoría: {{this.product.category}} -
-      Cantidad: {{this.quantity}}
-    </li>
-  {{/each}}
-  </ul>
-{{else}}
-  <p>No hay productos en el carrito</p>
-{{/if}}
+<div class="nav">
+  <h2>{{message}}</h2>
+  <div class="bottonsNav">
+    <form method="get" action="/api/login/logout">
+    <button type="submit">Logout</button>
+    </form>
+    <form method="get" action="/api/dbProducts">
+    <button type="submit">Productos</button>
+    </form>
+  </div>
+</div>
+<div class="cartsContain">
+  <h1>Carrito de Compras</h1>
+  {{#if cart.productos.length}}
+    <ul>
+    {{#each cart.productos}}
+      <li>
+        <img src="{{this.product.img}}">
+        Cantidad: {{this.quantity}}
+        <form id="delProd" method="POST" action="/api/dbCarts/{{../cart._id}}/products/{{this.product._id}}">
+          <input type="hidden" name="product_id" value="{{_id}}">
+          <button id="delProdButton" type="submit">❌</button>
+        </form>
+      </li>
+    {{/each}}
+    </ul>
+  {{else}}
+    <p>No hay productos en el carrito</p>
+  {{/if}}
+</div>
