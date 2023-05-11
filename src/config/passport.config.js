@@ -105,6 +105,27 @@ const initializePassport = () => {
       console.error(error)
     }
   })
-}
 
+
+  passport.use('currentSession', new LocalStrategy((req, done) => {
+    try {
+      if (req.session && req.session.user) {
+        const session = req.session
+        const user = req.session.user
+  
+        const currentSession = {
+          session,
+          user
+        }
+        return done(null, currentSession);
+      } else {
+        return done(null, false);
+      }
+    } catch (error) {
+      done(error)
+    }
+  }))
+
+
+}
 module.exports = initializePassport

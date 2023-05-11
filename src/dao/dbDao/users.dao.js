@@ -20,7 +20,7 @@ async function usersCreate(userInfo){
       email,
       age,
       password,
-      role,
+      role
     }
 
     // Crear un nuevo usuario con su respectiva info y rol
@@ -30,6 +30,8 @@ async function usersCreate(userInfo){
     const cart = new Cart({
       userId: user._id
     });
+    // Vincular el id del carrito con el usuario
+    user.cartId = cart._id
     // Guardar el carrito con el id del usuario
     await cart.save();
 
