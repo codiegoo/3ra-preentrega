@@ -17,7 +17,7 @@ router.get('/', privateAccess, async (req, res) => {
       ? `Bienvenido ${user.role} ${user.first_name} ${user.last_name}!`
       : null;
     // Buscar el carrito del usuario por el id del usuario
-    const cart = await Cart.findOne({ userId: user._id });
+    const cart = await Cart.findOne({ _id: user.cartId });
     // parsear el objeto con el id del usuario a cadena
     const cartId = cart._id.toString()
     const products = await productSearch(req, message, cartId)

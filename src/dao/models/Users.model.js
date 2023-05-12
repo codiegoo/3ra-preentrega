@@ -12,11 +12,13 @@ const collectionSchema = new mongoose.Schema({
   },
   age: Number,
   password: String,
+  cartId: String,
   role: {
     type: String,
     enum: ['administrador', 'usuario'],
     default: 'usuario',
-  },
+  }
+
 })
 
 const Users = mongoose.model(collectionName, collectionSchema)

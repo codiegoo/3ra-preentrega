@@ -67,7 +67,7 @@ const initializePassport = () => {
     new GithubStrategy(
       {
         clientID: '4366bf8ab2389bc95ba7',
-        clientSecret: '0adfbc869ceaf314bb8c2d602ec62857d7bb0b5a',
+        clientSecret: '39b6d026a158a8c0e5c1a13e922fe609df99a843',
         callbackURL: 'http://localhost:8080/api/login/githubcallback',
       },
       async ( accessToken, refreshToken,profile, done) => {
@@ -105,27 +105,6 @@ const initializePassport = () => {
       console.error(error)
     }
   })
-
-
-  passport.use('currentSession', new LocalStrategy((req, done) => {
-    try {
-      if (req.session && req.session.user) {
-        const session = req.session
-        const user = req.session.user
-  
-        const currentSession = {
-          session,
-          user
-        }
-        return done(null, currentSession);
-      } else {
-        return done(null, false);
-      }
-    } catch (error) {
-      done(error)
-    }
-  }))
-
 
 }
 module.exports = initializePassport
