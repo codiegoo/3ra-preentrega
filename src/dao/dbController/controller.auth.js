@@ -1,7 +1,5 @@
 const { Router } = require('express')
 const Users = require('../models/Users.model')
-const publicAccess = require('../../middlewares/publicAccess.middleware')
-const {isValidPassword} = require('../../utils/cryptPassword.utils')
 const passport = require('passport')
 
 const router = Router()
@@ -28,7 +26,8 @@ router.post('/', passport.authenticate('login', { failureRedirect: 'login/faillo
       first_name: req.user.first_name,
       last_name: req.user.last_name,
       email: req.user.email,
-      role: req.user.role
+      role: req.user.role,
+      cartId: req.user.cartId
     }
     res.status(200).json({ status: 'succes', message: 'sesion establecida'})
   } catch (error) {
