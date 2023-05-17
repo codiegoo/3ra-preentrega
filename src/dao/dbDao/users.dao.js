@@ -15,9 +15,9 @@ async function usersCreate(userInfo){
 
     //crear un carrito para el usuario
     const cart = new Cart()
-    const cId = cart._id.toString()
     await cart.save()
-
+    const cartId = cart._id
+    
 		//Agregar la clave role a la informacion del usuario
     const newUserInfo = {
       first_name,
@@ -26,7 +26,7 @@ async function usersCreate(userInfo){
       age,
       password,
       role,
-      cartId:cId
+      cartId,
     }
     //Crear un nuevo usuario con su respectiva info y rol
     const user = await Users.create(newUserInfo)
