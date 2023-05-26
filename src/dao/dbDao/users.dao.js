@@ -1,5 +1,7 @@
+const bcrypt = require('bcrypt')
 const Users = require('../models/Users.model')
 const Cart = require('../models/Carts.model')
+const { admin_email, admin_password } = require('../../config/superUser.config')
 
 
 async function usersCreate(userInfo){
@@ -9,8 +11,11 @@ async function usersCreate(userInfo){
 
     // Verificar si el usuario es admin y lo clasifica
     let role = 'usuario'
-    if (email === 'admin@gmail.com' && password === 'admin') {
-      role = 'administrador'
+    // Comparar la contraseña ingresada con el hash almacenado en la variable admin_password
+    const passwordMatch = bcrypt.compare(password, admin_password)
+
+    if (email === admin_email && passwordMatch) {
+      role = 'administrador';
     }
 
     //crear un carrito para el usuario

@@ -6,7 +6,7 @@ const MongoStore = require('connect-mongo')
 const mongoConnect = require('../db')
 const router = require('./routers')
 const passport = require('passport')
-const initializePassport = require('./config/passport.config')
+const initializePassport = require('./config/passport/passport.config')
 
 
 
@@ -19,12 +19,12 @@ app.use(express.urlencoded({ extended: true }));
 // Servir archivos estáticos desde la carpeta "public"
 app.use(express.static(__dirname + '/public'));
 // Middleware de session
-const {dbPassword} = require('./config/db.config')
+const {dbAdmin, dbPassword, dbName, dbHost} = require('./config/db.config')
 app.use(
   session({
     store: MongoStore.create({
       mongoUrl:
-        `mongodb+srv://codiego:${dbPassword}@clustercodiego.bwl42a0.mongodb.net/Ecommerce?retryWrites=true&w=majority`,
+        `mongodb+srv://${dbAdmin}:${dbPassword}@${dbHost}/${dbName}?retryWrites=true&w=majority`,
       mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
     }),
     secret: 'coderSecret',
