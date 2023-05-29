@@ -1,6 +1,4 @@
 const { Router } = require('express')
-// const {usersCreate} = require('../dbDao/users.dao')
-// const {hashPassword} = require('../../utils/cryptPassword.utils')
 const passport = require('passport')
 
 const router = Router()

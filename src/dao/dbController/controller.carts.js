@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const Cart = require('../models/Carts.model')
 const Products = require('../models/Products.model')
 const privateAccess = require('../../middlewares/privateAccess.middleware')
+const { saveProductInCar } = require('../dbDao/carts.dao')
 const router = Router()
 
 //POST crea un carrito vacio
@@ -34,21 +35,8 @@ router.post('/:cartId/:productId', async (req, res) => {
   try {
     const cart = await Cart.findOne({ _id: req.params.cartId });
     const product = await Products.findOne({_id: req.params.productId});
-    if (!product) throw new Error('Product not found');
-
-    const itemIndex = cart.productos.findIndex(item => item.product._id.toString() === req.params.productId);
-    if (itemIndex !== -1) {
-      // Si el producto ya existe en el carrito, aumenta la cantidad en 1
-      cart.productos[itemIndex].quantity += 1;
-    } else {
-      // Si el producto no existe en el carrito, agrega un nuevo objeto al array de productos
-      cart.productos.push({
-        product: req.params.productId,
-        quantity: 1
-      });
-    }
-
-    await cart.save();
+    
+    await saveProductInCar(cart, product)
     res.status(200).redirect(req.header('Referer'))
   } catch (error) {
     console.log(error);
