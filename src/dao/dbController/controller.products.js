@@ -1,11 +1,11 @@
 const { Router } = require('express')
-const Products = require('../models/Products.model')
-const Cart = require('../models/Carts.model')
+const Products = require('../../models/Products.model')
+const Cart = require('../../models/Carts.model')
 const uploader = require('../../utils/multer.utils')
 const router = Router()
 const privateAccess = require('../../middlewares/privateAccess.middleware')
-const productSearch = require('../dbDao/products.dao')
-
+const productSearch = require('../products.dao')
+const adminAccess = require('../../middlewares/adminAcces.middleware')
 
 
 // Utiliza el middleware de acceso privado para verificar que el usuaio este autenticado si no lo redirecciona al login
@@ -31,7 +31,7 @@ router.get('/', privateAccess, async (req, res) => {
   }
 });
 
-router.post('/', uploader.single('file'), async (req, res) => {
+router.post('/', adminAccess , async (req, res) => {
   try {
     const newProduct = await Products.create(req.body)
     res.json({message: newProduct})
@@ -40,7 +40,7 @@ router.post('/', uploader.single('file'), async (req, res) => {
   }
 })
 
-router.put('/:productId', async (req, res) => {
+router.put('/:productId', adminAccess , async (req, res) => {
   try {
     const updatedProduct = await Products.findByIdAndUpdate(req.params.productId, req.body, { new: true })
     res.json({ message: 'Product updated successfully', product: updatedProduct })
@@ -50,7 +50,7 @@ router.put('/:productId', async (req, res) => {
   }
 })
 
-router.delete('/:productId', async (req, res) => {
+router.delete('/:productId', adminAccess , async (req, res) => {
   try {
     await Products.findByIdAndDelete(req.params.productId)
     res.json({message: `Product with ID ${req.params.productId} has been deleted`})

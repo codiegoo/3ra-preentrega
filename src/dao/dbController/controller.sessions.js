@@ -1,14 +1,14 @@
 const {Router} = require('express')
 const router = Router()
-
-const passport = require('passport')
+const UserDTO = require('../dto/users.dto')
 
 
 router.get('/', (req, res) => {
   try {
     if (req.session && req.session.user) {
-      const session = req.session
-      return res.status(200).json(session)
+      const userSession = req.session.user
+      const UserDto = new UserDTO(userSession)
+      return res.status(200).json(UserDto)
     }
       return res.json({message: 'Usuario no autenticado, por favor inicia sesion o registrate.'})
   } catch (error) {

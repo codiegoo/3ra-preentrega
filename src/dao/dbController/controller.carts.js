@@ -1,9 +1,11 @@
 const { Router } = require('express')
 const mongoose = require('mongoose')
-const Cart = require('../models/Carts.model')
-const Products = require('../models/Products.model')
-const privateAccess = require('../../middlewares/privateAccess.middleware')
-const { saveProductInCar } = require('../dbDao/carts.dao')
+const Cart = require('../../models/Carts.model')
+const Products = require('../../models/Products.model')
+const userAcces = require('../../middlewares/userAcces.middleware')
+const saveProductInCar = require('../carts.dao')
+const checkDataTicket = require('../tickets.dao')
+const uuid = require('uuid')
 const router = Router()
 
 //POST crea un carrito vacio
@@ -19,7 +21,7 @@ router.post('/', async (req, res) => {
 })
 
 // GET muestra un carrito en especifico
-router.get('/:cid', privateAccess, async (req, res) => {
+router.get('/:cid', userAcces, async (req, res) => {
   try {
       const cart = await Cart.findById(req.params.cid).populate('productos.product');
       res.status(200).render('carts.handlebars', {cart});
@@ -31,7 +33,7 @@ router.get('/:cid', privateAccess, async (req, res) => {
 
 
 //POST introduce un producto en un carrito
-router.post('/:cartId/:productId', async (req, res) => {
+router.post('/:cartId/:productId',userAcces , async (req, res) => {
   try {
     const cart = await Cart.findOne({ _id: req.params.cartId });
     const product = await Products.findOne({_id: req.params.productId});
@@ -102,5 +104,32 @@ router.delete('/:cid', async (req, res) => {
   }
 });
 
+
+// Finalizar compra
+
+router.get('/:cid/purchase',userAcces , async (req, res) => {
+  try {
+    const cartId = req.params.cid
+    const cart = await Cart.findById(cartId)
+    const userEmail = req.user.email
+    const code = uuid.v4()
+
+    const purchaseData = await checkDataTicket(code, userEmail, cart)
+    console.log(purchaseData)
+
+    const ticket = purchaseData.ticket
+    const unprocessedProducts = purchaseData.unprocessedProducts
+
+    if(unprocessedProducts.length > 0){
+      res.json({"Productos sin stock suficiente no procesados": unprocessedProducts,
+                "Ticket de compra de los productos que si fueron procesados": ticket})
+    }else{
+      res.json({"Gracias por tu compra": ticket})
+    }
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error: 'Error al finalizar la compra' });
+  }
+})
 
 module.exports = router

@@ -1,5 +1,4 @@
 const { Router } = require('express')
-const Users = require('../models/Users.model')
 const passport = require('passport')
 
 const router = Router()
