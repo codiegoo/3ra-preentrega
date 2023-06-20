@@ -1,8 +1,10 @@
 const Tickets = require('../../models/Tickets.model')
 const Products = require('../../models/Products.model')
+const CustomErrorRepository = require('./errors.repository')
 
 
 class TicketsRepository{
+
 
   async processDataTicket(code, userEmail, cart) {
 
@@ -60,7 +62,7 @@ class TicketsRepository{
         unprocessedProducts.push(product);
       }
     } catch (error) {
-     console.error(error);
+      throw error
     } 
   }
 }

@@ -3,20 +3,19 @@ const passport = require('passport')
 
 const router = Router()
 
-router.get('/', (req, res) => {
+router.get('/', (req, res, next) => {
   try {
     res.render('login.handlebars')
   } catch (error) {
-    res.status(400).json({error: error})
+    next(error)
   }
 })
 
-router.post('/', passport.authenticate('login', { failureRedirect: 'login/faillogin' }),  async (req, res) => {
+router.post('/', passport.authenticate('login', { failureRedirect: 'login/faillogin' }),  async (req, res, next) => {
   try {
     if(!req.user){
-      return res
-          .status(401)
-          .json({ status: 'error', error: 'Usuario y contraseña no coinciden' })
+      const error = error
+      return next(error)
     }
 
     // Establecer una session con los datos del usuario autenticado
@@ -31,13 +30,13 @@ router.post('/', passport.authenticate('login', { failureRedirect: 'login/faillo
     res.status(200).json({ status: 'succes', message: 'sesion establecida'})
   } catch (error) {
     console.log(error.message)
-    res.status(500).json({ status: 'error', error: 'Internal Server Error' })
+    next(error)
   }
 })
 
-router.get('/logout', (req, res) => {
+router.get('/logout', (req, res, next) => {
   req.session.destroy(error => {
-    if (error) return res.json({ error })
+    if (error) return next(error)
     res.redirect('/api/login')
   })
 })
@@ -57,8 +56,8 @@ router.get(
 )
 
 
-router.get('/faillogin', (req, res) => {
+router.get('/faillogin', (req, res, next) => {
   console.log('falló estrategia de autenticacion')
-  res.json({ error: 'Failed login' })
+  next(error)
 })
 module.exports = router
