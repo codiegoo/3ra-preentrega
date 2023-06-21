@@ -5,6 +5,8 @@ const router = Router()
 const privateAccess = require('../../middlewares/privateAccess.middleware')
 const productSearch = require('../products.dao')
 const adminAccess = require('../../middlewares/adminAcces.middleware')
+const userAcces = require('../../middlewares/userAcces.middleware')
+const ProductsRepository = require('../repository/products.repository')
 
 
 // Utiliza el middleware de acceso privado para verificar que el usuaio este autenticado si no lo redirecciona al login
@@ -22,10 +24,22 @@ router.get('/', privateAccess, async (req, res, next) => {
     const products = await productSearch(req, message, cartId)
     //renderizamos la vista handlebars y pasamos los datos con los que trabajaremos
     res.render('products.handlebars', products);
-  } catch (err) {
+  } catch (error) {
     next(error)
   }
 });
+
+
+//genera 100 productos con el mismo formato que los de la db
+router.get('/mockingProducts',userAcces, async (req, res, next) => {
+  try {
+    const productsRepository = new ProductsRepository()
+    const mockProducts = await productsRepository.generateMockProducts()
+    res.json({Productos: mockProducts})
+  } catch (error) {
+    next(error)
+  }
+})
 
 
 //Agregar un nuevo producto a la db
