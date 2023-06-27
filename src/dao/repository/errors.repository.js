@@ -8,7 +8,7 @@ const errorMessages = {
 }
 
 class ErrorRepository extends Error {
-  constructor(code, message) {
+  constructor(message, code) {
     super(message || errorMessages[code])
     this.code = code
   }

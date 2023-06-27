@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt')
 const Users = require('../../models/Users.model')
 const Cart = require('../../models/Carts.model')
 const { admin_email, admin_password } = require('../../config/superUser.config')
+const ErrorRepository = require('./errors.repository')
 
 
 class UserRepository {
@@ -9,6 +10,10 @@ class UserRepository {
   async createUser(userInfo) {
     try {
       const {first_name,last_name,email,age,password} = userInfo
+
+      if(!userInfo){
+        throw new ErrorRepository('Datos incorrectos, verifica que los campos no esten vacios!', 400)
+      }
 
       // Verificar si el usuario es admin y lo clasifica
       let role = 'usuario'
@@ -38,7 +43,7 @@ class UserRepository {
       const user = await Users.create(newUserInfo)
       return user
     } catch (error) {
-      throw error
+      throw new ErrorRepository('Error al crear el usuario', 500)
     }
   }
 }

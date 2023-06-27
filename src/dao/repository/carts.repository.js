@@ -1,5 +1,5 @@
 
-const CustomErrorRepository = require('./errors.repository')
+const ErrorRepository = require('./errors.repository')
 
 
 class CartsRepository {
@@ -20,7 +20,7 @@ class CartsRepository {
       }
       await cart.save();
     } catch (error) {
-      throw error
+      throw new ErrorRepository('Error al agregar producto al carrito', 400)
     }
   }
 }

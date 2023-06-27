@@ -22,7 +22,7 @@ router.post('/', userAcces, async (req, res, next) => {
 })
 
 // GET muestra un carrito en especifico
-router.get('/:cid',  async (req, res, next) => {
+router.get('/:cid',userAcces,  async (req, res, next) => {
   try {
       const cart = await Cart.findById(req.params.cid).populate('productos.product')
       res.status(200).render('carts.handlebars', {cart})
@@ -34,7 +34,7 @@ router.get('/:cid',  async (req, res, next) => {
 
 
 //POST introduce un producto en un carrito
-router.post('/:cartId/:productId', async (req, res, next) => {
+router.post('/:cartId/:productId',userAcces, async (req, res, next) => {
   try {
     const cart = await Cart.findOne({ _id: req.params.cartId })
     const product = await Products.findOne({_id: req.params.productId})
