@@ -1,20 +1,5 @@
-{"level":"debug","message":"Mensaje de prueba - Debug","timestamp":"2023-06-25T20:13:51.133Z"}
-{"level":"info","message":"Mensaje de prueba - Info","timestamp":"2023-06-25T20:13:51.137Z"}
-{"level":"debug","message":"Mensaje de prueba - Debug","timestamp":"2023-06-25T20:13:55.490Z"}
-{"level":"info","message":"Mensaje de prueba - Info","timestamp":"2023-06-25T20:13:55.491Z"}
-{"level":"debug","message":"Mensaje de prueba - Debug","timestamp":"2023-06-25T20:14:17.161Z"}
-{"level":"info","message":"Mensaje de prueba - Info","timestamp":"2023-06-25T20:14:17.165Z"}
-{"level":"warning","message":"Mensaje de prueba - Warning","timestamp":"2023-06-25T20:14:17.165Z"}
-{"level":"error","message":"Mensaje de prueba - Error","timestamp":"2023-06-25T20:14:17.165Z"}
-{"level":"debug","message":"Mensaje de prueba - Debug","timestamp":"2023-06-25T21:11:11.118Z"}
-{"level":"info","message":"Mensaje de prueba - Info","timestamp":"2023-06-25T21:11:11.120Z"}
-{"level":"warning","message":"Mensaje de prueba - Warning","timestamp":"2023-06-25T21:11:11.121Z"}
-{"level":"error","message":"Mensaje de prueba - Error","timestamp":"2023-06-25T21:11:11.121Z"}
-{"level":"debug","message":"Mensaje de prueba - Debug","timestamp":"2023-06-25T21:11:13.703Z"}
-{"level":"info","message":"Mensaje de prueba - Info","timestamp":"2023-06-25T21:11:13.703Z"}
-{"level":"warning","message":"Mensaje de prueba - Warning","timestamp":"2023-06-25T21:11:13.703Z"}
-{"level":"error","message":"Mensaje de prueba - Error","timestamp":"2023-06-25T21:11:13.704Z"}
-{"level":"debug","message":"Mensaje de prueba - Debug","timestamp":"2023-06-25T21:11:47.448Z"}
-{"level":"info","message":"Mensaje de prueba - Info","timestamp":"2023-06-25T21:11:47.451Z"}
-{"level":"warning","message":"Mensaje de prueba - Warning","timestamp":"2023-06-25T21:11:47.451Z"}
-{"level":"error","message":"Mensaje de prueba - Error","timestamp":"2023-06-25T21:11:47.451Z"}
+{"level":"info","message":"GET /api/loggerTest","timestamp":"2023-06-28T02:59:17.542Z"}
+{"level":"debug","message":"Mensaje de prueba - Debug","timestamp":"2023-06-28T02:59:17.762Z"}
+{"level":"info","message":"Mensaje de prueba - Info","timestamp":"2023-06-28T02:59:17.762Z"}
+{"level":"warning","message":"Mensaje de prueba - Warning","timestamp":"2023-06-28T02:59:17.762Z"}
+{"level":"error","message":"Mensaje de prueba - Error","timestamp":"2023-06-28T02:59:17.762Z"}

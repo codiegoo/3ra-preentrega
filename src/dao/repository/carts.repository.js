@@ -1,4 +1,4 @@
-
+const logger = require('../../config/logs/logger.config')
 const ErrorRepository = require('./errors.repository')
 
 
@@ -19,7 +19,9 @@ class CartsRepository {
         });
       }
       await cart.save();
+      logger.debug('producto guardado con exito!')
     } catch (error) {
+      logger.error('Error al agregar el producto al carrito', error)
       throw new ErrorRepository('Error al agregar producto al carrito', 400)
     }
   }

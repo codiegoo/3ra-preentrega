@@ -41,8 +41,11 @@ class UserRepository {
       }
       //Crear un nuevo usuario con su respectiva info y rol
       const user = await Users.create(newUserInfo)
+
+      logger.info('Usuario creado con exito', user)
       return user
     } catch (error) {
+      logger.error('Error al crear el usuario, verifica tus datos.', error)
       throw new ErrorRepository('Error al crear el usuario', 500)
     }
   }

@@ -7,8 +7,16 @@ const mongoConnect = require('../db')
 const router = require('./routers')
 const passport = require('passport')
 const initializePassport = require('./config/passport/passport.config')
+const logger = require('./config/logs/logger.config')
 
 
+
+
+//middleware de logger de errores
+app.use((req, res, next) => {
+  logger.info(`${req.method} ${req.url}`)
+  next()
+})
 
 //middleware para cookies
 app.use(cookieParser());
