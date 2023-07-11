@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt')
 const Users = require('../../models/Users.model')
 const Cart = require('../../models/Carts.model')
 const { admin_email, admin_password } = require('../../config/superUser.config')
+const logger = require('../../config/logs/logger.config')
+const nodemailer = require('nodemailer')
 const ErrorRepository = require('./errors.repository')
 
 
@@ -48,6 +50,58 @@ class UserRepository {
       logger.error('Error al crear el usuario, verifica tus datos.', error)
       throw new ErrorRepository('Error al crear el usuario', 500)
     }
+  }
+
+
+  async changeUserRole(user){
+    try {
+
+      const usuario = await Users.findOne({_id: user._id})
+      
+      if(usuario.role === 'usuario'){
+        usuario.role = 'premium'
+      }else{
+        usuario.role = 'usuario'
+      }
+
+      await usuario.updateOne({role: usuario.role})
+      
+      return usuario
+    } catch (error) {
+      logger.error('Error al cambiar el role del usuario', error)
+      throw new ErrorRepository('Error al cambiar el rol', 500)
+    }
+  }
+
+  async sendPasswordResetEmail(email){
+    // Configura el transporte de nodemailer para enviar el correo electrónico
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'diegoedvflores03@gmail.com',
+        pass: 'lipcjmltkzpzljny',
+      }
+    });
+  
+    // Crea el enlace de restablecimiento de contraseña
+    const resetLink = `http://localhost:3000/api/login/forgot-password/${email}`;
+  
+    // Configura el correo electrónico
+    const mailOptions = {
+      from: 'diegoedvflores03@gmail.com',
+      to: email,
+      subject: 'Restablecimiento de contraseña',
+      text: `Para restablecer tu contraseña, haz clic en el siguiente enlace: ${resetLink}`,
+    };
+  
+    // Envía el correo electrónico
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error('Error al enviar el correo electrónico:', error);
+      } else {
+        console.log('Correo electrónico enviado:', info.response);
+      }
+    });
   }
 }
 

@@ -1,7 +1,9 @@
 const { Router } = require('express')
 const passport = require('passport')
-const ErrorRepository = require('../repository/errors.repository')
+const UserRepository = require('../repository/users.repository')
 const logger = require('../../config/logs/logger.config')
+const ErrorRepository = require('../repository/errors.repository')
+
 
 const router = Router()
 
@@ -17,6 +19,8 @@ router.post('/', passport.authenticate('register', { failureRedirect: 'register/
   }
 })
 
+
+
 router.get('/', (req, res, next) => {
   try {
     res.render('register.handlebars')
@@ -30,4 +34,25 @@ router.get('/failregister', (req, res, next) => {
 
   next(error)
 })
+
+
+router.get('/premium', async (req, res, next) => {
+  try {
+    
+    const user = req.session.user
+    if(user.role === 'administrador'){
+      throw new ErrorRepository('Error, role no autorizado', 401)
+    }
+    const userRepository = new UserRepository()
+    const changeRole = await userRepository.changeUserRole(user)
+    logger.info('se cambio el role del usuario actual', changeRole)
+    res.json({user: changeRole})
+    
+  } catch (error) {
+    logger.error('Error al cambiar el role del usuario', error)
+    next(error)
+  }
+})
+
+
 module.exports = router

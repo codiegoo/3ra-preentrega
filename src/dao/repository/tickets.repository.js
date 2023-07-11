@@ -1,6 +1,7 @@
 const Tickets = require('../../models/Tickets.model')
 const Products = require('../../models/Products.model')
 const ErrorRepository = require('./errors.repository')
+const logger = require('../../config/logs/logger.config')
 
 
 class TicketsRepository{
@@ -39,12 +40,15 @@ class TicketsRepository{
         purchaser: userEmail,
         processProducts: processedProducts
       });
+
+      logger.info('Ticket con los productos procesados', ticket)
   
       return {
         ticket: ticket,
         unprocessedProducts: unprocessedProducts
       }
     } catch (error) {
+      logger.error('Error al procesar los productos para la compra', error)
       throw new ErrorRepository('error al procesar tu compra', 400)
     }
   }
@@ -66,6 +70,7 @@ class TicketsRepository{
         unprocessedProducts.push(product);
       }
     } catch (error) {
+      logger.error('Error al buscar los productos', error)
       throw new ErrorRepository('Error al procesar los productos', 400)
     } 
   }

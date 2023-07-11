@@ -18,7 +18,7 @@ const collectionSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['administrador', 'usuario'],
+    enum: ['administrador', 'usuario', 'premium'],
     default: 'usuario',
   }
 
