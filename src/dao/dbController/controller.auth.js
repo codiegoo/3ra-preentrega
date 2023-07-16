@@ -16,13 +16,15 @@ router.get('/', (req, res, next) => {
 })
 
 //Recuperar contraseña
-router.get('/forgot-Password-email', (req, res, next) => {
+router.get('/forgot-password-email', (req, res, next) => {
   try {
     res.render('forgotPasswordEmail.handlebars')
   } catch (error) {
     next(error)
   }
 })
+
+
 router.get('/forgot-password/:email', (req, res, next) => {
   try {
     const email = req.params.email
@@ -46,20 +48,8 @@ router.post('/forgot-password-email',async (req, res, next) => {
       throw new ErrorRepository('Usuario no encontrado, verifica tu correo electronico', 404)
     }
 
-
-    // const token = jwt.sign({ email }, secret_key, { expiresIn: '1h' })
-
-
-    // const userRepository = new UserRepository()
-    // await userRepository.sendPasswordResetEmail(email)
-
-    // res.cookie('resetToken', token, { maxAge: 3600000, httpOnly: true })
-
     const resetPasswordRepository = new ResetPasswordRepository()
     const createToken = await resetPasswordRepository.createToken(email, res)
-
-
-
 
     res.json({message: 'token sent successfully',
               toke: createToken})
@@ -77,30 +67,8 @@ router.post('/reset-password/:email', async (req, res, next) => {
   
   try {
 
-
     const resetPasswordRepository = new ResetPasswordRepository()
     await resetPasswordRepository.resetPassword(newPassword, token, email)
-
-    // const decodecToken = jwt.verify(token, secret_key)
-    // if(decodecToken.email !== req.params.email){
-    //   return new ErrorRepository('El usuario no coincide con el email de solicitud.', 401)
-    // }
-    // const user = await Users.findOne({email: req.params.email})
-    // // Compara la nueva contraseña con la contraseña almacenada en la base de datos
-    // const passwordMatch = bcrypt.compareSync(newPassword, user.password)
-
-    // if (passwordMatch) {
-    //   alert('La contraseña debe ser diferente a la anterior')
-    //   return res.status(401).json({ error: 'La nueva contraseña debe ser diferente a la anterior' })
-    // }
-
-    // const hashedPass = await bcrypt.hash(newPassword, 10)
-
-
-    // // Actualiza la contraseña en la base de datos
-    // user.password = hashedPass
-    // await user.save()
-
 
     res.status(200).json({message: 'Contraseña cambiada con exito'})
   } catch (error) {

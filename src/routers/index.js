@@ -9,15 +9,20 @@ const ErrorRepository = require('../dao/repository/errors.repository')
 
 
 
+
 const errorHandler = (err, req, res, next) => {
   if (err instanceof ErrorRepository) {
     const errorMessage = err.message || 'Error desconocido'
     res.status(err.code).json({ error: errorMessage });
   } else {
     console.error(err);
-    res.status(500).json({ error: 'Ocurrió un error en el servidor.' });
+    res.status(500).json({ error: 'Ocurrió un error en el servidor.' })
   }
-};
+}
+
+
+
+
 
 const router = app => {
   app.use('/api/register', userController)
@@ -27,7 +32,6 @@ const router = app => {
   app.use('/api/sessions/current', currentSession)
   app.use('/api/messages', messagesController)
   app.use('/api/loggerTest', loggerTest)
-
   app.use(errorHandler)
 }
 

@@ -1,0 +1,209 @@
+openapi: "3.0.1"
+info:
+  title: API Products
+  version: "1.0"
+paths:
+  /api/dbCarts:
+    post:
+      summary: Crea un nuevo carrito vacio y sin enlazarlo al usuario.
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Carrito creado con exito
+          content:
+            aplication/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Cart"
+        "500":
+          description: Internal Server Error
+  /api/dbCarts/{cid}:
+    get:
+      summary: Obtiene el carrito del usuario con los productos agregados.
+      tags:
+        - Carts
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: id del carrito enlazado con el usuario.
+      responses:
+        "200":
+          description: Carrito obtenido con exito
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Cart"
+        "404":
+          description: Carrito no encontrado 
+    put:
+      summary: Actualiza el carrito con un nuevo arreglo de productos
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          required: true
+          description: id del carrito a actualizar
+      requestBody:
+        required: true
+        content:
+          aplication/json:
+            schema:
+              $ref: "#/components/requestBodies/updateProductsToCart"
+      responses:
+        "200":
+          description: carrito actualizado con exito
+          content:
+            aplication/json:
+              schema:
+                $inf: "#/components/schemas/Cart"
+        "500":
+          descrition: Error al actualizar el carrito
+    delete:
+      summary: Elimina todos los productos del carrito
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          require: true
+          description: Id del carrito del usuario.
+      responses:
+        "200":
+          description: Todos los productos fueron eliminados con exito
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+        "500":
+          description: Error al eliminar los productos
+  /api/dbCarts/${cartId}/${productId}:
+    post:
+      summary: Introduce un producto en especifico al carrito del usuario.
+      tags:
+        - Carts
+      parameters:
+        - name: cartId
+          require: true
+          description: Id del carrito del usuario donde se va a guardar el producto.
+        - name: ProductId
+          require: true
+          description: Id del producto que el usuario quiere agregar al carrito.
+      responses:
+        "200":
+          description: El producto fue agregado con exito al carrito.
+          content:
+            aplication/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Cart"
+        "400":
+          description: Error al agregar el producto
+  /api/dbCarts/${cid}/products/${pid}:
+    put:
+      summary: Actualiza la cantidad de unidades de un producto en especifico
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          require: true
+          description: Id del carrito del usuario.
+        - name: pid
+          require: true
+          description: Id del producto que el usuario quiere actualizar su cantidad.
+      requestBody:
+        required: true
+        content:
+          aplication/json:
+            schema:
+              $ref: "#/components/requestBodies/updateQuantityProduct"
+      responses:
+        "200":
+          description: cantidad de unidades actualizada
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+        "400":
+          description: Error al actualizar la cantidad de unidades del producto
+    post:
+      summary: Elimina un producto en especifico del carrito
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          require: true
+          description: Id del carrito del usuario.
+        - name: pid
+          require: true
+          description: Id del producto que el usuario quiere eliminar.
+      responses:
+        "200":
+          description: Producto eliminado con exito!
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+        "400":
+          description: Error al eliminar el producto del carrito.
+
+
+
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        productos:
+          type: array
+          description: Productos que el usuario agregó al carrito
+          items:
+            type: object
+            properties:
+              product:
+                type: string
+                description: ID del producto
+              quantity:
+                type: number
+                description: Número de unidades del producto (por defecto es 1)
+  requestBodies:
+    updateProductsToCart:
+      description: Body con la informacion necesaria para actualizar el arreglo de productos del carrito
+      properties:
+        productos:
+          type: array
+          description: Nuevo arreglo con los nuevos productos que se van agregar al carrito
+          items:
+            type: object
+            properties:
+              product:
+                type: string
+                description: Id del producto
+              quantity:
+                type: number
+                description: Numero de unidades del producto
+      example:
+        productos: [
+          {
+            product: 51hj3b45k13v45134ger,
+            quantity: 1
+          },
+          {
+            product: sdfgasdufnvb0s8ergv,
+            quantity: 4
+          },
+          {
+            product: ashdfd87wd8w233df3,
+            quantity: 2
+          }
+        ]
+    updateQuantityProduct:
+      description: Body con la informacion necesaria para actualizar la cantidad de unidades de un producto
+      properties:
+        quantity:
+          type: number
+          description: nueva cantidad de unidades a cambiar
+      example:
+        quantity: 6

@@ -1,0 +1,208 @@
+openapi: "3.0.1"
+info:
+  title: API Products
+  version: "1.0"
+paths:
+  /api/dbProducts:
+    get:
+      summary: Obtiene una lista de todos los productos disponibles segun los fiiltros del usuario.
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Productos obtenidos con exito.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        "500":
+          description: Error al cargar los productos
+    post:
+      summary: Agregar un nuevo producto a la base de datos.
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          aplication/json:
+            schema:
+              $ref: "#/components/requestBodies/addProductDb"
+      responses:
+        "200":
+          description: Se agrego el producto a la db
+        "400":
+          description: Error al agregar el producto a la db
+  /api/dbProducts/mockingProducts:
+    get:
+      summary: Obtiene 100 productos de manera aleatoria con el mismo modelo de mongo.
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Productos generados con exito.
+          content:
+            aplication/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        "500":
+          description: Error al generar los productos
+  /api/dbProducts/${productId}:
+    put:
+      summary: Actualiza las propiedades de un productos en especifico.
+      tags:
+        - Products
+      parameters:
+        - name: productId
+          in: path
+          require: true
+          description: id del producto seleccionado por el usuario.
+      requestBody:
+        required: true
+        content:
+          aplication/json:
+            schema:
+              $ref: "#/components/requestBodies/updateProduct"
+      responses:
+        "200":
+          description: Propiedades actualizadas con exito
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "400":
+          description: Error al actualizar las propiedades del producto
+    delete:
+      summary: Elimina un producto en especifico.
+      tags:
+        - Products
+      parameters:
+        - name: productId
+          in: path
+          require: true
+          description: id del producto seleccionado por el usuario.
+      responses:
+        "200":
+          description: Producto eliminado con exito.
+          content:
+            aplication/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        "500":
+          description: Error al eliminar el producto
+
+
+
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: id de mongo
+        name:
+          type: string
+          description: nombre del producto
+        description:
+          type: string
+          description: descripcion del producto
+        price:
+          type: number
+          description: precio base del producto
+        stock:
+          type: number
+          description: cantidad de unidades disponibles del producto
+        code:
+          type: string
+          description: codigo general del producto
+        category:
+          type: string
+          description: categoria a la cual pertenece el producto
+        status:
+          type: boolean
+          description: estado de disponibilidad del producto
+        img:
+          type: string
+          description: url de la imagen descriptiva del producto
+        owner:
+          require: false
+          type: string
+          description: rol del usuario que creo el producto
+  requestBodies:
+    addProductDb:
+      description: Body con la informacion necesaria para crear un nuevo producto con exito.
+      properties:
+        name:
+          type: string
+          description: nombre del producto.
+        description:
+          type: string
+          description: descripcion del producto
+        price:
+          type: number
+          description: precio base del producto
+        stock:
+          type: number
+          description: cantidad de unidades disponibles del producto
+        code:
+          type: string
+          description: codigo general del producto
+        category:
+          type: string
+          description: categoria a la cual pertenece el producto
+        status:
+          type: boolean
+          description: estado de disponibilidad del producto
+        img:
+          type: string
+          description: url de la imagen descriptiva del producto
+        owner:
+          type: string
+          description: rol del usuario que creo el producto
+      example:
+        name: Detergente axion limon 1l.
+        description: Detergente para trates arranca grasa con aroma a limon
+        price: 78.00
+        stock: 100
+        code: 31f4-ef7h-df9f-24rd
+        category: limpieza
+        status: true
+        img: https://firebasestorage/detergente.jpeg
+        owner:
+    updateProduct:
+      description: Body con la informacion necesaria para actualizar las propiedadesde un producto.
+      properties:
+        name:
+          type: string
+          description: nombre del producto.
+        description:
+          type: string
+          description: descripcion del producto
+        price:
+          type: number
+          description: precio base del producto
+        stock:
+          type: number
+          description: cantidad de unidades disponibles del producto
+        code:
+          type: string
+          description: codigo general del producto
+        category:
+          type: string
+          description: categoria a la cual pertenece el producto
+        status:
+          type: boolean
+          description: estado de disponibilidad del producto
+        img:
+          type: string
+          description: url de la imagen descriptiva del producto
+      example:
+        price: 100
+        img: https://firebasestorage/newDetergente.jpeg

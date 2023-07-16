@@ -15,7 +15,7 @@ router.post('/', userAcces, async (req, res, next) => {
   try {
     const newCart = await Cart.create({})
     logger.info('Nuevo carrito creado!', newCart)
-    res.status(201).json(newCart)
+    res.status(200).json(newCart)
   } catch (error) {
     logger.error('Error al crear el carrito.', error)
     next(error)

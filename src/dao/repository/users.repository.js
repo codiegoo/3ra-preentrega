@@ -73,36 +73,6 @@ class UserRepository {
     }
   }
 
-  async sendPasswordResetEmail(email){
-    // Configura el transporte de nodemailer para enviar el correo electrónico
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'diegoedvflores03@gmail.com',
-        pass: 'lipcjmltkzpzljny',
-      }
-    });
-  
-    // Crea el enlace de restablecimiento de contraseña
-    const resetLink = `http://localhost:3000/api/login/forgot-password/${email}`;
-  
-    // Configura el correo electrónico
-    const mailOptions = {
-      from: 'diegoedvflores03@gmail.com',
-      to: email,
-      subject: 'Restablecimiento de contraseña',
-      text: `Para restablecer tu contraseña, haz clic en el siguiente enlace: ${resetLink}`,
-    };
-  
-    // Envía el correo electrónico
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error('Error al enviar el correo electrónico:', error);
-      } else {
-        console.log('Correo electrónico enviado:', info.response);
-      }
-    });
-  }
 }
 
 module.exports = UserRepository
