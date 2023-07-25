@@ -83,6 +83,7 @@ router.post('/', passport.authenticate('login', { failureRedirect: 'login/faillo
       throw new ErrorRepository('Usuario o contraseña incorrectos', 404)
     }
 
+
     // Establecer una session con los datos del usuario autenticado
     req.session.user = {
       _id: req.user._id,
@@ -93,9 +94,11 @@ router.post('/', passport.authenticate('login', { failureRedirect: 'login/faillo
       cartId: req.user.cartId
     }
 
+
     logger.info('Se inicio una sesion con exito', req.session.user)
     res.status(200).json({ status: 'succes', message: 'sesion establecida'})
   } catch (error) {
+    console.log(error)
     logger.error('Error al iniciar sesion', error)
     next(error)
   }

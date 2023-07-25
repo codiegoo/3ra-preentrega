@@ -46,17 +46,17 @@ const initializePassport = () => {
     new LocalStrategy(
       { usernameField: 'email' },
       async (username, password, done) => {
+
         try {
           const user = await Users.findOne({ email: username })
-          if (!user)
-            return done(null, false)
+          if (!user) return done(null, false)
           // Verificar si la contraseña ingresada coincide con la contraseña almacenada en la base de datos
-          if (!isValidPassword(password, user)) {
-            return done(null, false)
-          }
+          if (!isValidPassword(password, user)) return done(null, false)
+
+
           done(null, user)
         } catch (error) {
-          done(error)
+          return done(error)
         }
       }
     )

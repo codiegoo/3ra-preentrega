@@ -4,7 +4,7 @@
   "description": "integrando sockets al servidor y handlebars",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha test/supertest.test.js",
     "nodemon": "nodemon src/index"
   },
   "author": "",
@@ -31,5 +31,10 @@
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
     "winston": "^3.9.0"
+  },
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
+    "supertest": "^6.3.3"
   }
 }

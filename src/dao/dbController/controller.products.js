@@ -29,7 +29,7 @@ router.get('/', privateAccess, async (req, res, next) => {
     logger.info('Productos cargados con exito', products)
 
     //renderizamos la vista handlebars y pasamos los datos con los que trabajaremos
-    res.render('products.handlebars', products);
+    res.status(200).render('products.handlebars', products);
   } catch (error) {
     logger.error('Error al cargar los productos', error)
     next(error)
@@ -54,7 +54,6 @@ router.get('/mockingProducts',userAcces, async (req, res, next) => {
 router.post('/', adminAccess , async (req, res, next) => {
   try {
 
-
     if(req.session.user.role !== 'premium' && req.session.user.role !== 'administrador'){
       throw new ErrorRepository('Rol de usuario rechazado', 401)
     }
@@ -67,7 +66,7 @@ router.post('/', adminAccess , async (req, res, next) => {
 
     const newProduct = await Products.create(req.body)
     logger.info('Se agrego un producto a la db', newProduct)
-    res.json({message: newProduct})
+    res.status(200).json({message: newProduct})
   } catch (error) {
     logger.error('Error al agregar producto', error)
     next(error)
@@ -75,20 +74,20 @@ router.post('/', adminAccess , async (req, res, next) => {
 })
 
 //Actualizar un producto en especifico
-router.put('/:productId', adminAccess , async (req, res, next) => {
+router.put('/:productId', adminAccess, async (req, res, next) => {
   try {
 
 
-    const product = await Products.findById(req.params.productId)
-    const user = req.session.user
+    // const product = await Products.findById(req.params.productId)
+    // const user = req.session.user
 
-    if (user.role === 'administrador' || (user.email !== 'premium' && product.owner !== 'premium')) {
-      return new ErrorRepository('No tienes permiso para modificar este producto', 401)
-    }
+    // if (user.role === 'administrador' || (user.email !== 'premium' && product.owner !== 'premium')) {
+    //   return new ErrorRepository('No tienes permiso para modificar este producto', 401)
+    // }
 
     const updatedProduct = await Products.findByIdAndUpdate(req.params.productId, req.body, { new: true })
     logger.info('Producto actualizado con exito', updatedProduct)
-    res.json({ message: 'Product updated successfully', product: updatedProduct })
+    res.status(200).json({ message: 'Product updated successfully', product: updatedProduct })
   } catch (error) {
     logger.error('Error al actualizar el producto')
     next(error)
@@ -98,12 +97,12 @@ router.put('/:productId', adminAccess , async (req, res, next) => {
 router.delete('/:productId', adminAccess , async (req, res, next) => {
   try {
 
-    const product = await Products.findById(req.params.productId)
-    const user = req.session.user
+    // const product = await Products.findById(req.params.productId)
+    // const user = req.session.user
 
-    if (user.role === 'administrador' || (user.email !== 'premium' && product.owner !== 'premium')) {
-      return new ErrorRepository('No tienes permiso para eliminar este producto', 401)
-    }
+    // if (user.role === 'administrador' || (user.email !== 'premium' && product.owner !== 'premium')) {
+    //   return new ErrorRepository('No tienes permiso para eliminar este producto', 401)
+    // }
 
 
     await Products.findByIdAndDelete(req.params.productId)

@@ -37,6 +37,7 @@ app.use(
       mongoUrl:
         `mongodb+srv://${dbAdmin}:${dbPassword}@${dbHost}/${dbName}?retryWrites=true&w=majority`,
       mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
+      collectionName: 'sessions'
     }),
     secret: 'coderSecret',
     resave: false,
