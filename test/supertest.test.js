@@ -1,35 +1,39 @@
 const chai = require('chai')
 const supertest = require('supertest')
 const app = require('../src/app')
+const {testerEmail, testerPassword} = require('../src/config/superUser.config')
+const {cartId, productId} = require('../src/config/util.config')
 
 
 const expect = chai.expect
 const requester = supertest(app)
 
+let cookies // Variable global para almacenar las cookies de sesión
+
 describe('test de productos', () => {
-  let cookies; // Variable para almacenar las cookies de sesión
+
 
   before(async function() {
-    this.timeout(20000); // Aumenta el tiempo de espera para el hook before
+    this.timeout(10000) //tiempo de espera para el hook before
 
     // Realiza la autenticación previa antes de todas las pruebas de productos
     try {
       const resLogin = await requester
         .post('/api/login')
-        .send({ email: 'admintester@gmail.com', password: 'admin' });
-      cookies = resLogin.headers['set-cookie'];
+        .send({ email: testerEmail, password: testerPassword })
+      cookies = resLogin.headers['set-cookie']
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  });
+  })
 
   it('El endpoint GET /api/dbProducts debe de mostrar todos los productos con o sin filtros', async () => {
     // Agrega las cookies de sesión a la solicitud de productos
     const getProducts = await requester
       .get('/api/dbProducts')
-      .set('Cookie', cookies); // Agrega las cookies a la solicitud
+      .set('Cookie', cookies) // Agrega las cookies a la solicitud
 
-    expect(getProducts.status).to.equal(200);
+    expect(getProducts.status).to.equal(200)
   });
 
   it('El endpoint POST /api/dbProducts agrega un nuevo producto a la base de datos', async () => {
@@ -76,7 +80,7 @@ describe('test de productos', () => {
       .set('Cookie', cookies)
 
     const productId = addProduct.body.message._id
-    console.log(productId)
+
 
     // Datos actualizados del producto
     const updatedProductData = {
@@ -128,3 +132,87 @@ describe('test de productos', () => {
   });
 
 });
+
+describe('test de carrito', () => {
+
+  it('El endpoint GET /api/dbCarts/:cid  obtiene un carrito en especifico',async () => {
+
+    const getCart = await requester
+      .get(`/api/dbCarts/${cartId}`)
+      .set('Cookie', cookies)
+
+    expect(getCart.status).to.equal(200)
+  })
+
+  it('El endpoint POST /api/dbCarts/cartId/:productId agrega un producto en especifico a un carrito',async () => {
+
+    const addProductInCart = await requester
+      .post(`/api/dbCarts/${cartId}/${productId}`)
+      .set('Cookie', cookies)
+
+    expect(addProductInCart.status).to.equal(200)
+  })
+
+  it('El endpoint PUT /api/dbCarts/:cid/products/:pid actualiza solo la cantidad de unidades de un producto dentro del carrito', async () => {
+
+    const newQuantity = {
+      "quantity":5
+    }
+
+    const putQuantityInProduct = await requester
+      .put(`/api/dbCarts/${cartId}/products/${productId}`)
+      .send(newQuantity)
+      .set('Cookie', cookies)
+
+    expect(putQuantityInProduct.status).to.equal(200)
+  })
+
+  it('El endpoint PUT /api/dbCarts/:cid actualiza el arreglo de productos del carrito', async () => {
+
+    const newProducts = {
+      "productos": [
+        {
+          "product":"6450057caf3c3c8755334196",
+          "quantity": 1
+        },
+        {
+          "product":"64500ee7af3c3c8755334203",
+          "quantity": 7
+        },
+        {
+          "product":"64500ee7af3c3c8755334203",
+          "quantity": 9
+        },
+        {
+          "product":"64500e4baf3c3c87553341ff",
+          "quantity": 2
+        }
+      ]
+    }
+
+    const putProductsInCart = await requester
+      .put(`/api/dbCarts/${cartId}`)
+      .send(newProducts)
+      .set('Cookie', cookies)
+
+    expect(putProductsInCart.status).to.equal(200)
+  })
+
+
+
+  it('El endpoin POST /api/dbCarts/:cid/products/:pid elimina del carrito el producto seleccionado', async  () => {
+    const deleteProductoInCart = await requester
+      .post(`/api/dbCarts/${cartId}/products/${productId}`)
+      .set('Cookie', cookies)
+
+    expect(deleteProductoInCart.status).to.equal(200)
+  })
+
+  it('El enpoint DELETE /api/dbCarts/:cid elimina todos los productos que exitan en el carrito', async () => {
+    const deleteAllProducts = await requester
+      .delete(`/api/dbCarts/${cartId}`)
+      .set('Cookie', cookies)
+
+    expect(deleteAllProducts.status).to.equal(200)
+  })
+})
