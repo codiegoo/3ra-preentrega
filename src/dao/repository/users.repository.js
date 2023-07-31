@@ -65,7 +65,7 @@ class UserRepository {
       }
 
       await usuario.updateOne({role: usuario.role})
-      
+
       return usuario
     } catch (error) {
       logger.error('Error al cambiar el role del usuario', error)

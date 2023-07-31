@@ -10,6 +10,7 @@ const requester = supertest(app)
 
 let cookies // Variable global para almacenar las cookies de sesión
 
+
 describe('test de productos', () => {
 
 

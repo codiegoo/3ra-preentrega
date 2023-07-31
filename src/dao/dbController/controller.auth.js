@@ -95,6 +95,8 @@ router.post('/', passport.authenticate('login', { failureRedirect: 'login/faillo
     }
 
 
+    await Users.findByIdAndUpdate(req.user._id, { last_conection: true })
+
     logger.info('Se inicio una sesion con exito', req.session.user)
     res.status(200).json({ status: 'succes', message: 'sesion establecida'})
   } catch (error) {
@@ -104,7 +106,11 @@ router.post('/', passport.authenticate('login', { failureRedirect: 'login/faillo
   }
 })
 
-router.get('/logout', (req, res, next) => {
+router.get('/logout',async (req, res, next) => {
+
+  await Users.findByIdAndUpdate(req.user._id, { last_conection: false })
+
+
   req.session.destroy(error => {
     if (error){
       logger.error('Error al cerrar la sesion', error)
@@ -124,6 +130,7 @@ router.get(
   passport.authenticate('github', { failureRedirect: 'login/faillogin' }),
   async (req, res) => {
     req.session.user = req.user
+    await Users.findByIdAndUpdate(req.user._id, { last_conection: true })
     res.redirect('/api/dbProducts?limit=9')
   }
 )

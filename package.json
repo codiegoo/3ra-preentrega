@@ -1,7 +1,7 @@
 {
-  "name": "websocketsserver",
+  "name": "ecommerceserver",
   "version": "1.0.0",
-  "description": "integrando sockets al servidor y handlebars",
+  "description": "api de mi servidor web de un ecommerce",
   "main": "index.js",
   "scripts": {
     "test": "mocha test/supertest.test.js",

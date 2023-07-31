@@ -1,8 +1,8 @@
 const productsController = require('../dao/dbController/controller.products')
 const cartController = require('../dao/dbController/controller.carts')
-const userController = require('../dao/dbController/controller.users')
+const registerController = require('../dao/dbController/controller.register')
 const authController = require('../dao/dbController/controller.auth')
-const currentSession = require('../dao/dbController/controller.sessions')
+const userController = require('../dao/dbController/controller.users')
 const messagesController = require('../dao/dbController/controller.messages')
 const loggerTest = require('../dao/dbController/constroller.loggerTest')
 const ErrorRepository = require('../dao/repository/errors.repository')
@@ -25,11 +25,11 @@ const errorHandler = (err, req, res, next) => {
 
 
 const router = app => {
-  app.use('/api/register', userController)
+  app.use('/api/register', registerController)
   app.use('/api/login', authController)
   app.use('/api/dbProducts', productsController)
   app.use('/api/dbCarts', cartController)
-  app.use('/api/sessions/current', currentSession)
+  app.use('/api/user', userController)
   app.use('/api/messages', messagesController)
   app.use('/api/loggerTest', loggerTest)
   app.use(errorHandler)
