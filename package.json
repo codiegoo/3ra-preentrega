@@ -4,7 +4,7 @@
   "description": "api de mi servidor web de un ecommerce",
   "main": "index.js",
   "scripts": {
-    "start":"node src/index",
+    "start": "node src/index",
     "test": "mocha test/supertest.test.js",
     "nodemon": "nodemon src/index"
   },
@@ -32,6 +32,7 @@
     "socket.io": "^4.6.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
+    "uuid": "^9.0.0",
     "winston": "^3.9.0"
   },
   "devDependencies": {
