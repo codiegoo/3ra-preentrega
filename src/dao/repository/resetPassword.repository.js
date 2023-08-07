@@ -1,10 +1,10 @@
 const logger = require('../../config/logs/logger.config')
-const nodemailer = require('nodemailer')
 const ErrorRepository = require('./errors.repository')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const Users = require('../../models/Users.model')
 const {secret_key} = require('../../config/app.config')
+const mailerDao = require('../mailer.dao')
 
 
 
@@ -12,14 +12,6 @@ class ResetPasswordRepository {
 
 
   async sendPasswordResetEmail(email){
-    // Configura el transporte de nodemailer para enviar el correo electrónico
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'diegoedvflores03@gmail.com',
-        pass: 'lipcjmltkzpzljny',
-      }
-    });
   
     // Crea el enlace de restablecimiento de contraseña
     const resetLink = `http://localhost:8080/api/login/forgot-password/${email}`;
@@ -33,13 +25,7 @@ class ResetPasswordRepository {
     };
   
     // Envía el correo electrónico
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error('Error al enviar el correo electrónico:', error);
-      } else {
-        console.log('Correo electrónico enviado:', info.response);
-      }
-    });
+    await mailerDao.sendMail(mailOptions)
   }
 
 

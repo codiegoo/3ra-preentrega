@@ -1,14 +1,7 @@
 const CartsRepository = require('./repository/carts.repository')
 
 
-async function saveProductInCar(cart, product) {
-  try {
-    const cartsRepository = new CartsRepository()
-    return cartsRepository.saveProduct(cart, product)
-  } catch (error) {
-    return error
-  }
-}
+const cartsDao = new CartsRepository()
 
 
-module.exports = saveProductInCar
+module.exports = cartsDao

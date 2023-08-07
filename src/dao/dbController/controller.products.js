@@ -3,12 +3,12 @@ const Products = require('../../models/Products.model')
 const Cart = require('../../models/Carts.model')
 const router = Router()
 const privateAccess = require('../../middlewares/privateAccess.middleware')
-const productSearch = require('../products.dao')
 const adminAccess = require('../../middlewares/adminAcces.middleware')
 const userAcces = require('../../middlewares/userAcces.middleware')
-const ProductsRepository = require('../repository/products.repository')
+const productsDao = require('../products.dao')
 const logger = require('../../config/logs/logger.config')
 const ErrorRepository = require('../repository/errors.repository')
+const mailerDao = require('../mailer.dao')
 
 
 // Utiliza el middleware de acceso privado para verificar que el usuaio este autenticado si no lo redirecciona al login
@@ -23,7 +23,7 @@ router.get('/', privateAccess, async (req, res, next) => {
     const cart = await Cart.findOne({ _id: user.cartId });
     // parsear el objeto con el id del usuario a cadena
     const cartId = cart._id.toString()
-    const products = await productSearch(req, message, cartId)
+    const products = await productsDao.searchProducts(req, message, cartId)
 
 
     logger.info('Productos cargados con exito', products)
@@ -40,8 +40,7 @@ router.get('/', privateAccess, async (req, res, next) => {
 //genera 100 productos con el mismo formato que los de la db
 router.get('/mockingProducts',userAcces, async (req, res, next) => {
   try {
-    const productsRepository = new ProductsRepository()
-    const mockProducts = await productsRepository.generateMockProducts()
+    const mockProducts = await productsDao.generateMockProducts()
     res.json({Productos: mockProducts})
   } catch (error) {
     logger.error('Error al generar los productos', error)
@@ -96,21 +95,31 @@ router.put('/:productId', adminAccess, async (req, res, next) => {
 
 router.delete('/:productId', adminAccess , async (req, res, next) => {
   try {
+    const product = await Products.findById(req.params.productId);
+    const user = req.session.user;
 
-    // const product = await Products.findById(req.params.productId)
-    // const user = req.session.user
+    if(user.role === 'premium'){
 
-    // if (user.role === 'administrador' || (user.email !== 'premium' && product.owner !== 'premium')) {
-    //   return new ErrorRepository('No tienes permiso para eliminar este producto', 401)
-    // }
+      const mailOptions = {
+        from: 'diegoedvflores03@gmail.com',
+        to: user.email,
+        subject: 'Producto Eliminado',
+        text: `Tu producto ${product.name} fue eliminado por terminos de privacidad`,
+      }
 
+      await mailerDao.sendMail(mailOptions)
+    }
 
-    await Products.findByIdAndDelete(req.params.productId)
-    logger.info('Producto eliminado', req.params.productId)
-    res.json({message: `Product with ID ${req.params.productId} has been deleted`})
+    if (user.role === 'administrador' || (user.role === product.owner)) { // Comparamos user.role con product.owner
+      await Products.findByIdAndDelete(req.params.productId);
+      logger.info('Producto eliminado', req.params.productId);
+      res.json({ message: `Product with ID ${req.params.productId} has been deleted` });
+    } else {
+      throw new ErrorRepository('No tienes permiso para eliminar este producto', 401);
+    }
   } catch (error) {
-    logger.error('Error al eliminar el producto', error)
-    next(error)
+    logger.error('Error al eliminar el producto', error);
+    next(error);
   }
 })
 

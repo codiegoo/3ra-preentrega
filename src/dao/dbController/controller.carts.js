@@ -3,8 +3,8 @@ const mongoose = require('mongoose')
 const Cart = require('../../models/Carts.model')
 const Products = require('../../models/Products.model')
 const userAcces = require('../../middlewares/userAcces.middleware')
-const saveProductInCar = require('../carts.dao')
-const checkDataTicket = require('../tickets.dao')
+const cartsDao = require('../carts.dao')
+const ticketsDao = require('../tickets.dao')
 const uuid = require('uuid')
 const ErrorRepository = require('../repository/errors.repository')
 const logger = require('../../config/logs/logger.config')
@@ -46,7 +46,7 @@ router.post('/:cartId/:productId',  async (req, res, next) => {
     //   return new ErrorRepository('No tienes permiso para agregar este producto', 401)
     // }
 
-    await saveProductInCar(cart, product)
+    await cartsDao.saveProduct(cart, product)
 
     logger.info('Producto agregado con exito!')
     res.status(200).json('se agrego el producto con exito')
@@ -131,7 +131,7 @@ router.get('/:cid/purchase',userAcces , async (req, res, next) => {
     const userEmail = req.user.email
     const code = uuid.v4()
 
-    const purchaseData = await checkDataTicket(code, userEmail, cart)
+    const purchaseData = await ticketsDao.checkDataTicket(code, userEmail, cart)
 
     const ticket = purchaseData.ticket
     const unprocessedProducts = purchaseData.unprocessedProducts

@@ -4,7 +4,7 @@ const Users = require('../../models/Users.model')
 const GithubStrategy = require('passport-github2')
 const { hashPassword } = require('../../utils/cryptPassword.utils')
 const { isValidPassword } = require('../../utils/cryptPassword.utils')
-const usersCreate = require('../../dao/users.dao')
+const userDao = require('../../dao/users.dao')
 
 const LocalStrategy = local.Strategy
 
@@ -31,7 +31,7 @@ const initializePassport = () => {
             password: hashedPassword
           }
 
-          const newUser = await usersCreate(userInfo)
+          const newUser = await userDao.createUser(userInfo)
 
           done(null, newUser)
         } catch (error) {
@@ -81,7 +81,7 @@ const initializePassport = () => {
               email: profile._json.email,
               password: '',
             }
-            const newUser = await usersCreate(userInfo)
+            const newUser = await userDao.createUser(userInfo)
             return done(null, newUser)
           }
           done(null, user)

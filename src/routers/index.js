@@ -6,6 +6,7 @@ const userController = require('../dao/dbController/controller.users')
 const messagesController = require('../dao/dbController/controller.messages')
 const loggerTest = require('../dao/dbController/constroller.loggerTest')
 const ErrorRepository = require('../dao/repository/errors.repository')
+const adminPanel = require('../dao/dbController/controller.adminPanel')
 
 
 
@@ -32,6 +33,7 @@ const router = app => {
   app.use('/api/user', userController)
   app.use('/api/messages', messagesController)
   app.use('/api/loggerTest', loggerTest)
+  app.use('/api/adminPanel', adminPanel)
   app.use(errorHandler)
 }
 

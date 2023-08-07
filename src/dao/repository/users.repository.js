@@ -73,6 +73,39 @@ class UserRepository {
     }
   }
 
+
+
+  async deleteInactiveUsers(){
+
+    try {
+      const twoDaysInMilliseconds = 2 * 24 * 60 * 60 * 1000;
+      const currentTime = new Date();
+  
+      const users = await Users.find({ last_conection: { $lt: new Date(currentTime - twoDaysInMilliseconds) } });
+  
+      for (const user of users) {
+        try {
+          const lastConnectionTime = user.last_conection;
+          const timeDifference = currentTime - lastConnectionTime;
+  
+          if (timeDifference >= twoDaysInMilliseconds) {
+            // Enviar el correo electrónico
+            await this.sendInactiveUserEmail(user.email);
+  
+            // Eliminar la cuenta
+            await Users.findByIdAndDelete(user._id);
+  
+            logger.info(`Cuenta del usuario ${user.email} eliminada por inactividad.`);
+          }
+        } catch (emailError) {
+          logger.error(`Error al enviar el correo al usuario ${user.email}:`, emailError);
+        }
+      }
+    } catch (error) {
+      logger.error('Error al eliminar usuarios inactivos:', error);
+      throw new ErrorRepository('Error al eliminar usuarios inactivos', 500);
+    }
+  }
 }
 
 module.exports = UserRepository

@@ -1,0 +1,11 @@
+<ul class="containerPanel">
+  {{#each users}}
+    <li>
+      <h2>Usuario: {{email}}</h2>
+      <p>Role: {{role}}</p>
+
+      <a href="/api/user/changeRole/{{_id}}">Cambiar rol</a>
+      <a href="/api/user/deleteUser/{{_id}}">Eliminar usuario</a>
+    </li>
+  {{/each}}
+</ul>

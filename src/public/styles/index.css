@@ -85,8 +85,21 @@ h1{
 
 
 /* Estilos de productos */
+
+.container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.container a{
+  width: 5rem;
+}
+
+
 ul.productsContain{
-  margin: 0;
+  width: 70%;
+  margin: 0 auto;
   padding: 0;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;

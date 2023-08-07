@@ -85,18 +85,13 @@ router.post('/', passport.authenticate('login', { failureRedirect: 'login/faillo
 
 
     // Establecer una session con los datos del usuario autenticado
-    req.session.user = {
-      _id: req.user._id,
-      first_name: req.user.first_name,
-      last_name: req.user.last_name,
-      email: req.user.email,
-      role: req.user.role,
-      cartId: req.user.cartId
-    }
 
+    req.session.user = req.user
 
-    await Users.findByIdAndUpdate(req.user._id, { last_conection: true })
+    const now = new Date()
+    await Users.findByIdAndUpdate(req.session.user._id, { last_conection: now })
 
+    req.session.save()
     logger.info('Se inicio una sesion con exito', req.session.user)
     res.status(200).json({ status: 'succes', message: 'sesion establecida'})
   } catch (error) {
@@ -108,7 +103,8 @@ router.post('/', passport.authenticate('login', { failureRedirect: 'login/faillo
 
 router.get('/logout',async (req, res, next) => {
 
-  await Users.findByIdAndUpdate(req.user._id, { last_conection: false })
+  const now = new Date()
+  await Users.findByIdAndUpdate(req.user._id, { last_conection: now })
 
 
   req.session.destroy(error => {
@@ -129,8 +125,13 @@ router.get(
   '/githubcallback',
   passport.authenticate('github', { failureRedirect: 'login/faillogin' }),
   async (req, res) => {
+
+    const now = new Date()
+    await Users.findByIdAndUpdate(req.user._id, { last_conection: now })
+
+
     req.session.user = req.user
-    await Users.findByIdAndUpdate(req.user._id, { last_conection: true })
+    req.session.save()
     res.redirect('/api/dbProducts?limit=9')
   }
 )

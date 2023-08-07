@@ -17,9 +17,9 @@
 {{/if}}
 
 <h1>Productos</h1>
-<div >
-  {{#if products.length}}
-    <ul class="productsContain">
+<div class="cntainer">
+  <a href="{{prevLink}}">⬅️</a>
+  <ul class="productsContain">
     {{#each products}}
       <li>
         <h2>{{name}}</h2>
@@ -35,16 +35,6 @@
         {{/if}}
       </li>
     {{/each}}
-    </ul>
-  {{else}}
-    <p>No se encontraron productos!☹</p>
-  {{/if}}
-  <div>
-    {{#if prevLink}}
-    <a href="{{prevLink}}">⬅️</a>
-    {{/if}}
-    {{#if nextLink}}
-    <a href="{{nextLink}}">➡️</a>
-    {{/if}}
-  </div>
+  </ul>
+  <a href="{{nextLink}}">➡️</a>
 </div>

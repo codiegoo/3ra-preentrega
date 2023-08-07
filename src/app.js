@@ -30,7 +30,7 @@ app.use(express.urlencoded({ extended: true }));
 // Servir archivos estáticos desde la carpeta "public"
 app.use(express.static(__dirname + '/public'));
 // Middleware de session
-const {dbAdmin, dbPassword, dbName, dbHost} = require('./config/db.config')
+const {dbAdmin, dbPassword, dbName, dbHost, dbSecretKey} = require('./config/db.config')
 app.use(
   session({
     store: MongoStore.create({
@@ -39,7 +39,7 @@ app.use(
       mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
       collectionName: 'sessions'
     }),
-    secret: 'coderSecret',
+    secret: `${dbSecretKey}`,
     resave: false,
     saveUninitialized: false
   })

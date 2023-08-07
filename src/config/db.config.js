@@ -5,5 +5,6 @@ module.exports = {
   dbAdmin: process.env.DB_ADMIN,
   dbPassword: process.env.DB_PASSWORD,
   dbHost: process.env.DB_HOST,
-  dbName: process.env.DB_NAME
+  dbName: process.env.DB_NAME,
+  dbSecretKey: process.env.DB_SECRET_KEY
 }
