@@ -105,7 +105,7 @@ describe('test de productos', () => {
   });
 
   it('El endpoint DELETE /api/dbProducts/:productId elimina un producto de la base de datos', async () => {
-    // Agrega un producto inicialmente a la base de datos para obtener su ID
+    // Agrega un producto inicialmente a la base de datos para obtener su id
     const randomProduct = {
       name: 'producto a eliminar',
       description: 'descripcion del producto a eliminar',
