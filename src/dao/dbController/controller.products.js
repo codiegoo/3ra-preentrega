@@ -77,12 +77,12 @@ router.put('/:productId', adminAccess, async (req, res, next) => {
   try {
 
 
-    // const product = await Products.findById(req.params.productId)
-    // const user = req.session.user
+    const product = await Products.findById(req.params.productId)
+    const user = req.session.user
 
-    // if (user.role === 'administrador' || (user.email !== 'premium' && product.owner !== 'premium')) {
-    //   return new ErrorRepository('No tienes permiso para modificar este producto', 401)
-    // }
+    if (user.role === 'administrador' || (user.email !== 'premium' && product.owner !== 'premium')) {
+      return new ErrorRepository('No tienes permiso para modificar este producto', 401)
+    }
 
     const updatedProduct = await Products.findByIdAndUpdate(req.params.productId, req.body, { new: true })
     logger.info('Producto actualizado con exito', updatedProduct)

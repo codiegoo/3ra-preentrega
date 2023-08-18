@@ -41,10 +41,10 @@ router.post('/:cartId/:productId',  async (req, res, next) => {
   try {
     const cart = await Cart.findOne({ _id: req.params.cartId })
     const product = await Products.findOne({_id: req.params.productId})
-    // const user = req.session.user
-    // if (user.role === 'premium' && product.owner !== 'premium') {
-    //   return new ErrorRepository('No tienes permiso para agregar este producto', 401)
-    // }
+    const user = req.session.user
+    if (user.role === 'premium' && product.owner !== 'premium') {
+      return new ErrorRepository('No tienes permiso para agregar este producto', 401)
+    }
 
     await cartsDao.saveProduct(cart, product)
 
@@ -131,7 +131,7 @@ router.get('/:cid/purchase',userAcces , async (req, res, next) => {
     const userEmail = req.user.email
     const code = uuid.v4()
 
-    const purchaseData = await ticketsDao.checkDataTicket(code, userEmail, cart)
+    const purchaseData = await ticketsDao.processDataTicket(code, userEmail, cart)
 
     const ticket = purchaseData.ticket
     const unprocessedProducts = purchaseData.unprocessedProducts
