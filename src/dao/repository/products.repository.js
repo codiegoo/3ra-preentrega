@@ -39,10 +39,10 @@ class ProductsRepository {
       const hasPrevPage = products.hasPrevPage;
       const hasNextPage = products.hasNextPage;
       const prevLink = hasPrevPage
-        ? `http://${req.headers.host}/api/dbProducts?page=${prevPage}&limit=${limit}&sort=${sort}&query=${query}`
+        ? `https://ecommerce-api-0cf4.up.railway.app/api/dbProducts?page=${prevPage}&limit=${limit}&sort=${sort}&query=${query}`
         : null;
       const nextLink = hasNextPage
-        ? `http://${req.headers.host}/api/dbProducts?page=${nextPage}&limit=${limit}&sort=${sort}&query=${query}`
+        ? `https://ecommerce-api-0cf4.up.railway.app/api/dbProducts?page=${nextPage}&limit=${limit}&sort=${sort}&query=${query}`
         : null;
 
       
