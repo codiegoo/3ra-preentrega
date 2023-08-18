@@ -4,7 +4,7 @@ const registerController = require('../dao/dbController/controller.register')
 const authController = require('../dao/dbController/controller.auth')
 const userController = require('../dao/dbController/controller.users')
 const messagesController = require('../dao/dbController/controller.messages')
-const loggerTest = require('../dao/dbController/constroller.loggerTest')
+const loggerTest = require('../dao/dbController/controller.loggerTest')
 const ErrorRepository = require('../dao/repository/errors.repository')
 const adminPanel = require('../dao/dbController/controller.adminPanel')
 
