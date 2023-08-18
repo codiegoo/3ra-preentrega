@@ -68,7 +68,7 @@ const initializePassport = () => {
       {
         clientID: 'Iv1.fd7a412bc2d3d8ea',
         clientSecret: 'a4bf21404e0482847624a410a84d97b34715416f',
-        callbackURL: '/api/login/githubcallback',
+        callbackURL: 'https://ecommerce-api-0cf4.up.railway.app/api/login/githubcallback',
       },
       async ( accessToken, refreshToken,profile, done) => {
         try {
