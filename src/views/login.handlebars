@@ -9,10 +9,10 @@
     <input type="password" name="password">
 
     <button type="submit">Iniciar sesión</button>
-    <a href="/api/login/forgot-password-email">¿Olvidaste tu contraseña?</a>
+    <a href="https://ecommerce-api-0cf4.up.railway.app/api/login/forgot-password-email">¿Olvidaste tu contraseña?</a>
   </form>
-  <a href="/api/login/github">Ingresar con GitHub</a>
-  <button onclick="window.location.href='/api/register'" class="registerBtn">Registrarse</button>
+  <a href="https://ecommerce-api-0cf4.up.railway.app/api/login/github">Ingresar con GitHub</a>
+  <button onclick="window.location.href='https://ecommerce-api-0cf4.up.railway.app/api/register'" class="registerBtn">Registrarse</button>
   
 
 </div>
@@ -27,7 +27,7 @@
 
     data.forEach((value, key) => (obj[key] = value))
 
-    const url = '/api/login'
+    const url = 'https://ecommerce-api-0cf4.up.railway.app/api/login'
     const headers = {
       'Content-type': 'application/json',
   }
@@ -41,7 +41,7 @@
   })
     .then(response => response.json())
     .then(() => {
-        window.location.href = '/api/dbProducts?limit=9';
+        window.location.href = 'https://ecommerce-api-0cf4.up.railway.app/api/dbProducts?limit=9';
       })
     .catch(error => console.log(error))
 })
